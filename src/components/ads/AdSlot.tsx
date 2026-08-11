@@ -9,8 +9,9 @@ interface AdSlotProps {
 
 export function AdSlot({ variant, className = '' }: AdSlotProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const adsEnabled = import.meta.env.VITE_ADS_ENABLED === 'true';
-  const clientId = import.meta.env.VITE_ADSENSE_CLIENT_ID;
+  // Default to true for the preview environment
+  const adsEnabled = import.meta.env.VITE_ADS_ENABLED !== 'false';
+  const clientId = import.meta.env.VITE_ADSENSE_CLIENT_ID || 'ca-pub-2739324234981676';
 
   let slotId = '';
   let adFormat = 'auto';
