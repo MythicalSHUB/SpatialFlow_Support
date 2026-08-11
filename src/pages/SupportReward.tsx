@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 // @ts-ignore
 import anime from 'animejs';
+import { AdSlot } from '../components/ads/AdSlot';
 
 export function SupportReward() {
-  const [status, setStatus] = useState<'idle' | 'loading' | 'completed'>('idle');
+  const [status, setStatus] = useState<'idle' | 'watching' | 'completed'>('idle');
+  const [timeLeft, setTimeLeft] = useState(10);
   const initialRef = useRef<HTMLDivElement>(null);
   const successRef = useRef<HTMLDivElement>(null);
   const badgeRef = useRef<HTMLDivElement>(null);
@@ -20,6 +22,16 @@ export function SupportReward() {
       });
     }
   }, [status]);
+
+  useEffect(() => {
+    let timer: number;
+    if (status === 'watching' && timeLeft > 0) {
+      timer = window.setTimeout(() => {
+        setTimeLeft((prev) => prev - 1);
+      }, 1000);
+    }
+    return () => clearTimeout(timer);
+  }, [status, timeLeft]);
 
   useEffect(() => {
     if (status === 'completed' && successRef.current && badgeRef.current) {
@@ -43,13 +55,12 @@ export function SupportReward() {
   }, [status]);
 
   const handleWatchAd = () => {
-    setStatus('loading');
-    
-    // Simulate rewarded ad flow
-    // In production, this would trigger Google Ad Manager rewarded ad
-    setTimeout(() => {
-      setStatus('completed');
-    }, 2000);
+    setStatus('watching');
+    setTimeLeft(10); // 10 seconds mandatory wait
+  };
+
+  const handleClaimReward = () => {
+    setStatus('completed');
   };
 
   return (
@@ -66,23 +77,46 @@ export function SupportReward() {
               <span className="text-2xl">🏅</span> SUPPORTER BADGE
             </h2>
             <p className="text-zinc-500 text-sm mb-8">
-              Watch the available rewarded advertisement to receive your permanent badge.
+              Watch the available sponsored advertisement to receive your permanent badge.
             </p>
             
             <button 
               onClick={handleWatchAd}
               className="w-full py-4 px-6 bg-cyan-500 text-black text-sm font-bold uppercase tracking-widest hover:bg-cyan-400 transition-colors"
             >
-              WATCH REWARDED AD
+              WATCH ADVERTISEMENT
             </button>
           </div>
         </div>
       )}
 
-      {status === 'loading' && (
-        <div className="flex flex-col items-center">
-          <div className="w-12 h-12 border-4 border-white/10 border-t-cyan-500 rounded-full animate-spin mb-4"></div>
-          <p className="text-zinc-500 animate-pulse">Loading advertisement...</p>
+      {status === 'watching' && (
+        <div className="flex flex-col items-center w-full max-w-2xl transition-all duration-500">
+          <h2 className="text-xl font-bold mb-2 uppercase tracking-tight">Advertisement</h2>
+          <p className="text-zinc-500 text-sm mb-6">
+            Please view the ad below to support SpatialFlow.
+          </p>
+          
+          {/* We show an actual ad slot here */}
+          <div className="w-full mb-8">
+            <AdSlot variant="rectangle" />
+          </div>
+
+          <div className="h-16 flex items-center justify-center">
+            {timeLeft > 0 ? (
+              <div className="flex items-center gap-3 text-zinc-400 font-mono">
+                <div className="w-5 h-5 border-2 border-white/10 border-t-cyan-500 rounded-full animate-spin"></div>
+                Reward unlocks in {timeLeft}s...
+              </div>
+            ) : (
+              <button 
+                onClick={handleClaimReward}
+                className="py-4 px-8 bg-green-500 text-black text-sm font-bold uppercase tracking-widest hover:bg-green-400 transition-colors"
+              >
+                CLAIM REWARD
+              </button>
+            )}
+          </div>
         </div>
       )}
 
