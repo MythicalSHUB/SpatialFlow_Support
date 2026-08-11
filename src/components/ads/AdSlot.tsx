@@ -80,29 +80,33 @@ export function AdSlot({ variant, className = '' }: AdSlotProps) {
       break;
   }
 
-  if (!adsEnabled) {
-    return null;
-  }
+  // if (!adsEnabled) {
+  //   return null;
+  // }
 
   return (
     <div className={`w-full bg-[#0A0A0A] border border-white/5 p-2 rounded my-8 ${className}`}>
       <div className="text-[10px] text-zinc-600 font-bold uppercase tracking-widest text-center mb-1">
-        ADVERTISEMENT
+        ADVERTISEMENT ({variant})
       </div>
       <div
         ref={containerRef}
         style={{ minHeight, minWidth }}
-        className="w-full max-w-full bg-zinc-900/30 border border-dashed border-white/10 flex items-center justify-center overflow-hidden opacity-0"
+        className="w-full max-w-full bg-zinc-900/50 border-2 border-dashed border-cyan-500/30 flex items-center justify-center overflow-hidden"
       >
-        <ins
-          className="adsbygoogle"
-          style={{ display: 'block', textAlign: adLayout === 'in-article' ? 'center' : undefined, width: '100%', height: '100%' }}
-          data-ad-layout={adLayout || undefined}
-          data-ad-client={clientId}
-          data-ad-slot={slotId}
-          data-ad-format={adFormat}
-          data-full-width-responsive="true"
-        />
+        {!adsEnabled ? (
+          <span className="text-zinc-500 font-mono text-xs">Ad Space (Ads Disabled in Preview)</span>
+        ) : (
+          <ins
+            className="adsbygoogle"
+            style={{ display: 'block', textAlign: adLayout === 'in-article' ? 'center' : undefined, width: '100%', height: '100%' }}
+            data-ad-layout={adLayout || undefined}
+            data-ad-client={clientId}
+            data-ad-slot={slotId}
+            data-ad-format={adFormat}
+            data-full-width-responsive="true"
+          />
+        )}
       </div>
     </div>
   );
