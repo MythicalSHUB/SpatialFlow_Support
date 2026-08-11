@@ -1,5 +1,5 @@
 {
-  "name": "FlowLab",
+  "name": "Support SpatialFlow",
   "description": "A standalone ad-supported microsite for SpatialFlow with technology and audio guides.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]

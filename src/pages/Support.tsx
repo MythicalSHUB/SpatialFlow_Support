@@ -30,10 +30,6 @@ export function Support() {
 
         <h1 className="text-5xl md:text-6xl font-black tracking-tight leading-[0.95] mb-6 uppercase opacity-0">SUPPORT SPATIALFLOW</h1>
         
-        <div className="opacity-0 mb-8 w-full max-w-2xl mx-auto">
-          <AdSlot variant="in-content" />
-        </div>
-
         <p className="text-lg text-zinc-400 mb-12 max-w-xl mx-auto opacity-0">
           SpatialFlow is developed independently. If you'd like to support its continued development, you can do so by visiting this page.
         </p>
@@ -53,9 +49,6 @@ export function Support() {
           </Link>
         </div>
 
-        <div className="opacity-0 mt-8">
-          <AdSlot variant="responsive" />
-        </div>
       </div>
     </div>
   );

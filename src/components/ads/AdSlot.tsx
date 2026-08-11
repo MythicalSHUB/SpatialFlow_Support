@@ -18,19 +18,15 @@ export function AdSlot({ variant, className = '' }: AdSlotProps) {
   switch (variant) {
     case 'leaderboard':
     case 'responsive':
-      slotId = import.meta.env.VITE_AD_SLOT_HOME || '2970011325';
-      break;
     case 'rectangle':
     case 'mobile':
-      slotId = import.meta.env.VITE_AD_SLOT_SIDEBAR || '1122334455';
+    case 'footer':
+      slotId = import.meta.env.VITE_AD_SLOT_HOME || '2970011325';
       break;
     case 'in-content':
       slotId = import.meta.env.VITE_AD_SLOT_ARTICLE || '2802224434';
       adLayout = 'in-article';
       adFormat = 'fluid';
-      break;
-    case 'footer':
-      slotId = import.meta.env.VITE_AD_SLOT_FOOTER || '5544332211';
       break;
   }
 
