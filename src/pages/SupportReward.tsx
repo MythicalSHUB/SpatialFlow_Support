@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, MouseEvent } from 'react';
 // @ts-ignore
 import anime from 'animejs';
 import { AdSlot } from '../components/ads/AdSlot';
@@ -54,6 +54,8 @@ export function SupportReward() {
     }
   }, [status]);
 
+  const [deepLinkStatus, setDeepLinkStatus] = useState<string | null>(null);
+
   const handleWatchAd = () => {
     setStatus('watching');
     setTimeLeft(10); // 10 seconds mandatory wait
@@ -61,6 +63,19 @@ export function SupportReward() {
 
   const handleClaimReward = () => {
     setStatus('completed');
+  };
+
+  const handleReturnToApp = (e: MouseEvent) => {
+    e.preventDefault();
+    setDeepLinkStatus('Opening SpatialFlow application (spatialflow://reward)...');
+    try {
+      window.location.href = 'spatialflow://reward';
+    } catch (err) {
+      console.log(err);
+    }
+    setTimeout(() => {
+      setDeepLinkStatus('Deep-link dispatched! If the app did not open automatically, switch back to SpatialFlow on your device.');
+    }, 1500);
   };
 
   return (
@@ -161,16 +176,19 @@ export function SupportReward() {
               </a>
             </div>
 
-            <a 
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                alert("This would deep-link back to the SpatialFlow Android app.");
-              }}
+            <button 
+              type="button"
+              onClick={handleReturnToApp}
               className="inline-block w-full py-4 px-6 bg-white text-black text-sm font-bold uppercase tracking-widest hover:bg-gray-200 transition-colors"
             >
               RETURN TO SPATIALFLOW
-            </a>
+            </button>
+
+            {deepLinkStatus && (
+              <div className="p-3 bg-zinc-800/80 border border-cyan-500/30 rounded text-xs text-cyan-300 animate-in fade-in">
+                {deepLinkStatus}
+              </div>
+            )}
           </div>
         </div>
       )}

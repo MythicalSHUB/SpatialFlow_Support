@@ -9,7 +9,7 @@ interface AdSlotProps {
 
 export function AdSlot({ variant, className = '' }: AdSlotProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  // Default to true for the preview environment
+  const [adLoaded, setAdLoaded] = useState(false);
   const adsEnabled = import.meta.env.VITE_ADS_ENABLED !== 'false';
   const clientId = import.meta.env.VITE_ADSENSE_CLIENT_ID || 'ca-pub-2739324234981676';
 
@@ -37,35 +37,30 @@ export function AdSlot({ variant, className = '' }: AdSlotProps) {
     try {
       // @ts-ignore
       (window.adsbygoogle = window.adsbygoogle || []).push({});
-      
+      setAdLoaded(true);
+
       if (containerRef.current) {
         anime({
           targets: containerRef.current,
           opacity: [0, 1],
-          translateY: [12, 0],
+          translateY: [8, 0],
           easing: 'easeOutExpo',
-          duration: 800,
+          duration: 600,
         });
       }
     } catch (e) {
-      console.error('AdSense error:', e);
+      console.warn('Ad network initializing...', e);
     }
   }, [adsEnabled]);
 
-  // Determine fixed minimum dimensions based on variant to prevent CLS
-  let minHeight = 'auto';
-  let minWidth = '100%';
+  // Dimensions based on standard IAB display specs
+  let minHeight = '90px';
   switch (variant) {
     case 'leaderboard':
       minHeight = '90px';
       break;
     case 'responsive':
-      minHeight = '250px';
-      break;
     case 'rectangle':
-      minHeight = '250px';
-      minWidth = '300px';
-      break;
     case 'in-content':
       minHeight = '250px';
       break;
@@ -73,37 +68,55 @@ export function AdSlot({ variant, className = '' }: AdSlotProps) {
       minHeight = '100px';
       break;
     case 'footer':
-      minHeight = '90px';
+      minHeight = '80px';
       break;
   }
 
-  // if (!adsEnabled) {
-  //   return null;
-  // }
-
   return (
-    <div className={`w-full bg-[#0A0A0A] border border-white/5 p-2 rounded my-8 ${className}`}>
-      <div className="text-[10px] text-zinc-600 font-bold uppercase tracking-widest text-center mb-1">
-        ADVERTISEMENT ({variant})
+    <div className={`w-full max-w-full my-6 ${className}`}>
+      <div className="flex items-center justify-between px-2 mb-1.5 text-[11px] font-mono text-zinc-500 uppercase tracking-wider">
+        <span className="flex items-center gap-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400/80 animate-pulse" />
+          Sponsored
+        </span>
+        <span>SpatialFlow Partner</span>
       </div>
+
       <div
         ref={containerRef}
-        style={{ minHeight, minWidth }}
-        className="w-full max-w-full bg-zinc-900/50 border-2 border-dashed border-cyan-500/30 flex items-center justify-center overflow-hidden"
+        style={{ minHeight }}
+        className="w-full relative rounded-lg bg-zinc-900/70 border border-white/10 hover:border-cyan-500/30 transition-colors flex items-center justify-center overflow-hidden p-2 shadow-inner"
       >
-        {!adsEnabled ? (
-          <span className="text-zinc-500 font-mono text-xs">Ad Space (Ads Disabled in Preview)</span>
-        ) : (
-          <ins
-            className="adsbygoogle"
-            style={{ display: 'block', textAlign: adLayout === 'in-article' ? 'center' : undefined, width: '100%', height: '100%' }}
-            data-ad-layout={adLayout || undefined}
-            data-ad-client={clientId}
-            data-ad-slot={slotId}
-            data-ad-format={adFormat}
-            data-full-width-responsive="true"
-          />
-        )}
+        <ins
+          className="adsbygoogle"
+          style={{
+            display: 'block',
+            textAlign: adLayout === 'in-article' ? 'center' : undefined,
+            width: '100%',
+            height: '100%',
+            minHeight,
+          }}
+          data-ad-layout={adLayout || undefined}
+          data-ad-client={clientId}
+          data-ad-slot={slotId}
+          data-ad-format={adFormat}
+          data-full-width-responsive="true"
+        />
+
+        {/* Fallback & Monetag interaction zone when third-party display ads are awaiting fill */}
+        <div className="absolute inset-0 -z-0 pointer-events-none flex flex-col items-center justify-center p-4 text-center">
+          <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-2 text-zinc-400">
+            <svg className="w-4 h-4 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </div>
+          <span className="text-xs font-semibold text-zinc-300 tracking-wide">
+            SpatialFlow Network Sponsor
+          </span>
+          <span className="text-[11px] text-zinc-500 mt-0.5 max-w-xs">
+            MultiTag Zone 280125 Active
+          </span>
+        </div>
       </div>
     </div>
   );
