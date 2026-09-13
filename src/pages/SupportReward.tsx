@@ -69,27 +69,25 @@ export function SupportReward() {
 
   const handleReturnToApp = (e: MouseEvent) => {
     e.preventDefault();
-    setDeepLinkStatus('Launching SpatialFlow (com.codetrio.spatialflow)...');
+    setDeepLinkStatus('Returning to SpatialFlow app...');
 
-    // Android Intent URL targeting package com.codetrio.spatialflow
-    const androidPackageIntent = 'intent:#Intent;package=com.codetrio.spatialflow;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;end';
-    const customSchemeIntent = 'intent://reward?badge=supporter#Intent;scheme=spatialflow;package=com.codetrio.spatialflow;end';
-    const directScheme = 'spatialflow://reward?badge=supporter';
+    // 1. Close tab/window (returns to app immediately if opened in Chrome Custom Tab or WebView)
+    try {
+      window.close();
+    } catch (_) {}
+
+    // 2. Pure package launcher intent with S.browser_fallback_url to strictly PREVENT Play Store redirect
+    const fallbackUrl = window.location.href;
+    const packageIntent = `intent:#Intent;package=com.codetrio.spatialflow;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;S.browser_fallback_url=${encodeURIComponent(fallbackUrl)};end`;
 
     try {
-      // First attempt Android package intent
-      window.location.href = androidPackageIntent;
+      window.location.href = packageIntent;
     } catch (err) {
-      console.warn('Primary package intent failed, trying custom scheme intent', err);
-      try {
-        window.location.href = customSchemeIntent;
-      } catch (e2) {
-        window.location.href = directScheme;
-      }
+      console.warn('Launch intent error:', err);
     }
 
     setTimeout(() => {
-      setDeepLinkStatus('Launch command sent to package com.codetrio.spatialflow. If it did not open automatically, tap the button or switch to SpatialFlow on your device.');
+      setDeepLinkStatus('Return signal sent to com.codetrio.spatialflow. You can also switch directly to SpatialFlow.');
     }, 1200);
   };
 
@@ -211,16 +209,16 @@ export function SupportReward() {
               </a>
             </div>
 
-            <a 
-              href="intent:#Intent;package=com.codetrio.spatialflow;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;end"
+            <button 
+              type="button"
               onClick={handleReturnToApp}
-              className="inline-flex items-center justify-center gap-2 w-full py-4 px-6 bg-white text-black text-sm font-bold uppercase tracking-widest hover:bg-gray-200 transition-colors shadow-lg"
+              className="inline-flex items-center justify-center gap-2 w-full py-4 px-6 bg-white text-black text-sm font-bold uppercase tracking-widest hover:bg-gray-200 transition-colors shadow-lg cursor-pointer"
             >
               <span>RETURN TO SPATIALFLOW APP</span>
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
               </svg>
-            </a>
+            </button>
 
             {deepLinkStatus && (
               <div className="p-3 bg-zinc-800/80 border border-cyan-500/30 rounded text-xs text-cyan-300 animate-in fade-in">
