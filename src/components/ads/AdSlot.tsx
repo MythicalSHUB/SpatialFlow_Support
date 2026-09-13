@@ -12,6 +12,7 @@ export function AdSlot({ variant, className = '' }: AdSlotProps) {
   const [adLoaded, setAdLoaded] = useState(false);
   const adsEnabled = import.meta.env.VITE_ADS_ENABLED !== 'false';
   const clientId = import.meta.env.VITE_ADSENSE_CLIENT_ID || 'ca-pub-2739324234981676';
+  const monetagDirectLink = import.meta.env.VITE_MONETAG_DIRECT_LINK || 'https://omg10.com/4/11793582';
 
   let slotId = '';
   let adFormat = 'auto';
@@ -103,20 +104,25 @@ export function AdSlot({ variant, className = '' }: AdSlotProps) {
           data-full-width-responsive="true"
         />
 
-        {/* Fallback & Monetag interaction zone when third-party display ads are awaiting fill */}
-        <div className="absolute inset-0 -z-0 pointer-events-none flex flex-col items-center justify-center p-4 text-center">
-          <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-2 text-zinc-400">
+        {/* Fallback & Monetag direct link interaction zone when third-party display ads are awaiting fill */}
+        <a 
+          href={monetagDirectLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="absolute inset-0 -z-0 group flex flex-col items-center justify-center p-4 text-center cursor-pointer hover:bg-white/[0.02] transition-colors"
+        >
+          <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 group-hover:border-cyan-500/50 flex items-center justify-center mb-2 text-zinc-400 group-hover:text-cyan-400 transition-colors">
             <svg className="w-4 h-4 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
           </div>
-          <span className="text-xs font-semibold text-zinc-300 tracking-wide">
+          <span className="text-xs font-semibold text-zinc-300 group-hover:text-cyan-300 tracking-wide transition-colors">
             SpatialFlow Network Sponsor
           </span>
-          <span className="text-[11px] text-zinc-500 mt-0.5 max-w-xs">
-            MultiTag Zone 280125 Active
+          <span className="text-[11px] text-zinc-500 mt-0.5 max-w-xs group-hover:text-zinc-400 transition-colors">
+            Tap to view sponsored offer &bull; Zone 11793582
           </span>
-        </div>
+        </a>
       </div>
     </div>
   );

@@ -56,6 +56,8 @@ export function SupportReward() {
 
   const [deepLinkStatus, setDeepLinkStatus] = useState<string | null>(null);
 
+  const monetagDirectLink = import.meta.env.VITE_MONETAG_DIRECT_LINK || 'https://omg10.com/4/11793582';
+
   const handleWatchAd = () => {
     setStatus('watching');
     setTimeLeft(10); // 10 seconds mandatory wait
@@ -67,15 +69,28 @@ export function SupportReward() {
 
   const handleReturnToApp = (e: MouseEvent) => {
     e.preventDefault();
-    setDeepLinkStatus('Opening SpatialFlow application (spatialflow://reward)...');
+    setDeepLinkStatus('Launching SpatialFlow (com.codetrio.spatialflow)...');
+
+    // Android Intent URL targeting package com.codetrio.spatialflow
+    const androidPackageIntent = 'intent:#Intent;package=com.codetrio.spatialflow;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;end';
+    const customSchemeIntent = 'intent://reward?badge=supporter#Intent;scheme=spatialflow;package=com.codetrio.spatialflow;end';
+    const directScheme = 'spatialflow://reward?badge=supporter';
+
     try {
-      window.location.href = 'spatialflow://reward';
+      // First attempt Android package intent
+      window.location.href = androidPackageIntent;
     } catch (err) {
-      console.log(err);
+      console.warn('Primary package intent failed, trying custom scheme intent', err);
+      try {
+        window.location.href = customSchemeIntent;
+      } catch (e2) {
+        window.location.href = directScheme;
+      }
     }
+
     setTimeout(() => {
-      setDeepLinkStatus('Deep-link dispatched! If the app did not open automatically, switch back to SpatialFlow on your device.');
-    }, 1500);
+      setDeepLinkStatus('Launch command sent to package com.codetrio.spatialflow. If it did not open automatically, tap the button or switch to SpatialFlow on your device.');
+    }, 1200);
   };
 
   return (
@@ -95,12 +110,18 @@ export function SupportReward() {
               Watch the available sponsored advertisement to receive your permanent badge.
             </p>
             
-            <button 
+            <a 
+              href={monetagDirectLink}
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={handleWatchAd}
-              className="w-full py-4 px-6 bg-cyan-500 text-black text-sm font-bold uppercase tracking-widest hover:bg-cyan-400 transition-colors"
+              className="inline-flex items-center justify-center gap-2 w-full py-4 px-6 bg-cyan-500 text-black text-sm font-bold uppercase tracking-widest hover:bg-cyan-400 transition-colors shadow-[0_0_20px_rgba(6,182,212,0.4)]"
             >
-              WATCH ADVERTISEMENT
-            </button>
+              <span>WATCH ADVERTISEMENT</span>
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+            </a>
           </div>
         </div>
       )}
@@ -108,13 +129,27 @@ export function SupportReward() {
       {status === 'watching' && (
         <div className="flex flex-col items-center w-full max-w-2xl animate-in fade-in zoom-in duration-500">
           <h2 className="text-xl font-bold mb-2 uppercase tracking-tight">Advertisement</h2>
-          <p className="text-zinc-500 text-sm mb-6">
-            Please view the ad below to support SpatialFlow.
+          <p className="text-zinc-500 text-sm mb-4">
+            Please view the sponsored offer below to support SpatialFlow.
           </p>
           
           {/* We show an actual ad slot here */}
-          <div className="w-full mb-8">
+          <div className="w-full mb-6">
             <AdSlot variant="rectangle" />
+          </div>
+
+          <div className="flex flex-col items-center gap-4 mb-4">
+            <a
+              href={monetagDirectLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-cyan-400 hover:text-cyan-300 underline underline-offset-4 flex items-center gap-1.5 transition-colors"
+            >
+              <span>Offer didn't open? Click here to view sponsored link</span>
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+            </a>
           </div>
 
           <div className="h-16 flex items-center justify-center">
@@ -126,7 +161,7 @@ export function SupportReward() {
             ) : (
               <button 
                 onClick={handleClaimReward}
-                className="py-4 px-8 bg-green-500 text-black text-sm font-bold uppercase tracking-widest hover:bg-green-400 transition-colors animate-in fade-in slide-in-from-bottom-4"
+                className="py-4 px-8 bg-green-500 text-black text-sm font-bold uppercase tracking-widest hover:bg-green-400 transition-colors animate-in fade-in slide-in-from-bottom-4 shadow-[0_0_20px_rgba(34,197,94,0.4)]"
               >
                 CLAIM REWARD
               </button>
@@ -176,13 +211,16 @@ export function SupportReward() {
               </a>
             </div>
 
-            <button 
-              type="button"
+            <a 
+              href="intent:#Intent;package=com.codetrio.spatialflow;action=android.intent.action.MAIN;category=android.intent.category.LAUNCHER;end"
               onClick={handleReturnToApp}
-              className="inline-block w-full py-4 px-6 bg-white text-black text-sm font-bold uppercase tracking-widest hover:bg-gray-200 transition-colors"
+              className="inline-flex items-center justify-center gap-2 w-full py-4 px-6 bg-white text-black text-sm font-bold uppercase tracking-widest hover:bg-gray-200 transition-colors shadow-lg"
             >
-              RETURN TO SPATIALFLOW
-            </button>
+              <span>RETURN TO SPATIALFLOW APP</span>
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </a>
 
             {deepLinkStatus && (
               <div className="p-3 bg-zinc-800/80 border border-cyan-500/30 rounded text-xs text-cyan-300 animate-in fade-in">
