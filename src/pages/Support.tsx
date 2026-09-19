@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 // @ts-ignore
 import anime from 'animejs';
 import { AdSlot } from '../components/ads/AdSlot';
+import { AdsterraNative } from '../components/ads/AdsterraNative';
 
 export function Support() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -24,7 +25,7 @@ export function Support() {
   return (
     <div className="max-w-3xl mx-auto px-4 md:px-8 py-12 text-center min-h-[80vh] flex flex-col justify-center">
       <div ref={containerRef} className="w-full">
-        <div className="opacity-0 mb-12">
+        <div className="opacity-0 mb-8">
           <AdSlot variant="leaderboard" />
         </div>
 
@@ -34,7 +35,7 @@ export function Support() {
           SpatialFlow is developed independently. If you'd like to support its continued development, you can do so by visiting this page.
         </p>
         
-        <div className="bg-zinc-900 border border-white/5 rounded p-8 mb-12 max-w-md mx-auto opacity-0 flex flex-col items-center">
+        <div className="bg-zinc-900 border border-white/5 rounded p-8 mb-8 max-w-md mx-auto opacity-0 flex flex-col items-center">
           <div className="text-4xl mb-4">🏅</div>
           <h2 className="text-2xl font-bold mb-4 uppercase tracking-tight">Supporter Reward</h2>
           <p className="text-zinc-500 text-sm mb-8 text-center">
@@ -49,6 +50,10 @@ export function Support() {
           </Link>
         </div>
 
+        {/* Adsterra Native Banner Unit 2 */}
+        <div className="opacity-0">
+          <AdsterraNative />
+        </div>
       </div>
     </div>
   );
