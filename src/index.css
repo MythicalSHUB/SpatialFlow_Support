@@ -1,22 +1,70 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Doto:wght@600;700;800;900&family=Space+Grotesk:wght@500;600;700&family=Space+Mono:wght@400;700&display=swap');
 
 @theme {
-  --color-brand-bg: #050505;
-  --color-brand-secondary: #0A0A0A;
-  --color-brand-surface: #111111;
-  --color-brand-border: rgba(255, 255, 255, 0.08);
+  --color-brand-bg: #000000;
+  --color-brand-secondary: #080808;
+  --color-brand-surface: #101010;
+  --color-brand-surface-elevated: #161616;
+  --color-brand-border: rgba(255, 255, 255, 0.12);
+  --color-brand-border-subtle: rgba(255, 255, 255, 0.06);
   --color-brand-text-primary: #FFFFFF;
   --color-brand-text-secondary: #A1A1AA;
-  --color-brand-accent: #06b6d4; /* Subtle cyan */
-  --color-brand-accent-hover: #0891b2;
-  --font-sans: 'Inter', sans-serif;
+  --color-brand-text-muted: #71717A;
+  --color-nothing-red: #D71921;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
+  --font-heading: 'Space Grotesk', -apple-system, sans-serif;
+  --font-mono: 'Space Mono', monospace;
+}
+
+/* Nothing OS Dot-Matrix Typography */
+.font-ndot {
+  font-family: 'Doto', monospace;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.font-heading {
+  font-family: var(--font-heading);
+}
+
+/* Nothing OS Dot-Matrix Grid Background */
+.bg-nothing-grid {
+  background-color: #000000;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+  background-size: 14px 14px;
+}
+
+.bg-nothing-grid-dense {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px);
+  background-size: 10px 10px;
+}
+
+/* Material 3 Expressive Geometric Icon Shape Containers */
+.m3-squircle {
+  border-radius: 20px;
+}
+
+.m3-asymmetric-1 {
+  border-radius: 24px 8px 24px 8px;
+}
+
+.m3-asymmetric-2 {
+  border-radius: 8px 24px 8px 24px;
+}
+
+.m3-pill {
+  border-radius: 9999px;
+}
+
+.m3-faceted {
+  border-radius: 18px 6px 18px 6px;
 }
 
 body {
-  background-color: var(--color-brand-bg);
-  color: var(--color-brand-text-primary);
+  background-color: #000000;
+  color: #FFFFFF;
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -35,7 +83,7 @@ body {
 }
 .progress-bar {
   height: 100%;
-  background: var(--color-brand-accent);
+  background: #FFFFFF;
   width: 0%;
   transform-origin: left;
 }

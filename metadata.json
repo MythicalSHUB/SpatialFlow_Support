@@ -1,6 +1,6 @@
 {
   "name": "Support SpatialFlow",
-  "description": "A standalone ad-supported microsite for SpatialFlow with technology and audio guides.",
+  "description": "Official support portal for SpatialFlow, an independent open-source Android music player.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

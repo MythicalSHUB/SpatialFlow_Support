@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState, MouseEvent } from 'react';
+import { Link } from 'react-router-dom';
 // @ts-ignore
 import anime from 'animejs';
+import { ArrowLeft, Award, Play, CheckCircle2, Star, Smartphone, ExternalLink } from 'lucide-react';
 import { AdSlot } from '../components/ads/AdSlot';
 import { ADSTERRA_SMARTLINK } from '../components/ads/AdsterraBanner';
+import { trackEvent } from '../lib/analytics';
 
 export function SupportReward() {
   const [status, setStatus] = useState<'idle' | 'watching' | 'completed'>('idle');
@@ -10,6 +13,10 @@ export function SupportReward() {
   const initialRef = useRef<HTMLDivElement>(null);
   const successRef = useRef<HTMLDivElement>(null);
   const badgeRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    trackEvent('reward_page_view', { status });
+  }, [status]);
 
   useEffect(() => {
     if (status === 'idle' && initialRef.current) {
@@ -58,21 +65,23 @@ export function SupportReward() {
   const [deepLinkStatus, setDeepLinkStatus] = useState<string | null>(null);
 
   const handleWatchAd = () => {
-    // Open Adsterra Smartlink (Unit 4) in a new tab
+    trackEvent('support_method_click', { method: 'watch_reward_ad' });
     try {
       window.open(ADSTERRA_SMARTLINK, '_blank', 'noopener,noreferrer');
     } catch (_) {}
 
     setStatus('watching');
-    setTimeLeft(10); // 10 seconds mandatory wait
+    setTimeLeft(10); // 10 seconds wait
   };
 
   const handleClaimReward = () => {
+    trackEvent('reward_claimed');
     setStatus('completed');
   };
 
   const handleReturnToApp = (e: MouseEvent) => {
     e.preventDefault();
+    trackEvent('return_to_app_click');
     setDeepLinkStatus('Returning to SpatialFlow app...');
 
     // 1. Close tab/window (returns to app immediately if opened in Chrome Custom Tab or WebView)
@@ -91,51 +100,84 @@ export function SupportReward() {
     }
 
     setTimeout(() => {
-      setDeepLinkStatus('Return signal sent to com.codetrio.spatialflow. You can also switch directly to SpatialFlow.');
+      setDeepLinkStatus('Return signal sent to com.codetrio.spatialflow. You can also switch directly back to SpatialFlow.');
     }, 1200);
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 md:px-8 py-24 text-center min-h-[60vh] flex flex-col items-center justify-center">
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16 md:py-24 text-center min-h-[75vh] flex flex-col items-center justify-center">
+      
+      {/* Back to main support portal */}
+      <div className="w-full max-w-md text-left mb-6">
+        <Link
+          to="/"
+          className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-zinc-400 hover:text-white transition-colors"
+        >
+          <ArrowLeft size={14} />
+          <span>Back to All Support Options</span>
+        </Link>
+      </div>
+
       {status === 'idle' && (
         <div ref={initialRef} className="max-w-md w-full">
-          <h1 className="text-5xl md:text-6xl font-black tracking-tight leading-[0.95] mb-6 uppercase opacity-0">SUPPORT SPATIALFLOW</h1>
-          <p className="text-zinc-400 mb-12 opacity-0">
-            Your support helps us continue improving SpatialFlow.
+          <div className="flex items-center justify-center gap-2 font-mono text-[10px] tracking-[0.2em] uppercase text-zinc-400 mb-2 opacity-0">
+            <span>NOTHING TO PAY</span>
+            <span className="text-zinc-600">·</span>
+            <span>SUPPORTER PROGRAM</span>
+          </div>
+          <h1 className="font-ndot text-4xl sm:text-5xl text-white tracking-widest mb-4 uppercase opacity-0">
+            SUPPORTER BADGE
+          </h1>
+          <p className="text-sm text-zinc-400 mb-8 opacity-0 leading-relaxed">
+            Support the ongoing development of SpatialFlow without spending money. Complete a short sponsored experience to receive a permanent badge in your Android app.
           </p>
           
-          <div className="bg-zinc-900 border border-white/5 rounded p-8 mb-8 opacity-0">
-            <h2 className="text-2xl font-bold mb-4 uppercase tracking-tight flex items-center justify-center gap-2">
-              <span className="text-2xl">🏅</span> SUPPORTER BADGE
-            </h2>
-            <p className="text-zinc-500 text-sm mb-8">
-              Watch the available sponsored advertisement to receive your permanent badge.
+          <div className="bg-[#080808] bg-[radial-gradient(#ffffff15_1px,transparent_1px)] [background-size:12px_12px] border border-white/15 hover:border-white/30 rounded-3xl p-6 sm:p-8 mb-8 opacity-0 text-left shadow-2xl relative overflow-hidden">
+            <div className="flex items-center gap-4 mb-5">
+              <div className="w-14 h-14 rounded-2xl bg-black border border-white/20 flex flex-col items-center justify-center relative shrink-0">
+                <div className="w-8 h-8 rounded-full border border-dashed border-white/40 flex items-center justify-center">
+                  <Award size={18} className="text-white" />
+                </div>
+              </div>
+              <div>
+                <h2 className="font-ndot text-lg sm:text-xl uppercase tracking-wider text-white">
+                  SpatialFlow Supporter
+                </h2>
+                <span className="text-[11px] font-mono text-zinc-400 uppercase tracking-widest">
+                  Permanent In-App Recognition
+                </span>
+              </div>
+            </div>
+
+            <p className="text-xs sm:text-sm text-zinc-300 mb-6 leading-relaxed">
+              Viewing this sponsored message helps offset server costs and audio API infrastructure while keeping SpatialFlow 100% free and in-app ad-free.
             </p>
             
             <button 
               type="button"
               onClick={handleWatchAd}
-              className="inline-flex items-center justify-center gap-2 w-full py-4 px-6 bg-cyan-500 text-black text-sm font-bold uppercase tracking-widest hover:bg-cyan-400 transition-colors shadow-[0_0_20px_rgba(6,182,212,0.4)] cursor-pointer"
+              className="inline-flex items-center justify-center gap-2.5 w-full py-4 px-6 rounded-full bg-white hover:bg-neutral-200 text-black text-xs font-mono font-bold uppercase tracking-widest transition-all shadow-[0_0_24px_rgba(255,255,255,0.2)] cursor-pointer"
             >
-              <span>WATCH ADVERTISEMENT</span>
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+              <span>Watch Sponsored Experience</span>
             </button>
           </div>
         </div>
       )}
 
       {status === 'watching' && (
-        <div className="flex flex-col items-center w-full max-w-2xl animate-in fade-in zoom-in duration-500">
-          <h2 className="text-xl font-bold mb-2 uppercase tracking-tight">Advertisement</h2>
-          <p className="text-zinc-500 text-sm mb-6">
-            Please view the sponsored advertisement below to support SpatialFlow.
+        <div className="flex flex-col items-center w-full max-w-2xl animate-in fade-in duration-300">
+          <div className="text-xs font-mono uppercase tracking-widest text-cyan-400 mb-1">
+            Sponsored Partner
+          </div>
+          <h2 className="text-2xl font-bold mb-2 uppercase tracking-tight text-white">
+            Supporting SpatialFlow
+          </h2>
+          <p className="text-zinc-400 text-xs sm:text-sm mb-6 max-w-md">
+            Please view the sponsored advertisement below. Your reward will unlock automatically once the timer expires.
           </p>
           
-          {/* We show an actual ad slot here */}
-          <div className="w-full mb-4">
+          {/* Ad slot */}
+          <div className="w-full mb-4 flex justify-center">
             <AdSlot variant="rectangle" />
           </div>
 
@@ -144,27 +186,26 @@ export function SupportReward() {
               href={ADSTERRA_SMARTLINK}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs text-cyan-400 hover:text-cyan-300 underline underline-offset-4 flex items-center gap-1.5 transition-colors"
+              className="text-xs font-mono text-cyan-400 hover:text-cyan-300 underline underline-offset-4 flex items-center gap-1.5 transition-colors"
             >
-              <span>Sponsored offer didn't open? Click here to view</span>
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-              </svg>
+              <span>Sponsored link did not open? Click here to view</span>
+              <ExternalLink size={12} />
             </a>
           </div>
 
           <div className="h-16 flex items-center justify-center">
             {timeLeft > 0 ? (
-              <div className="flex items-center gap-3 text-zinc-400 font-mono">
-                <div className="w-5 h-5 border-2 border-white/10 border-t-cyan-500 rounded-full animate-spin"></div>
-                Reward unlocks in {timeLeft}s...
+              <div className="flex items-center gap-3 text-zinc-400 font-mono text-sm bg-zinc-900 px-5 py-2.5 rounded-full border border-white/10">
+                <div className="w-4 h-4 border-2 border-white/20 border-t-cyan-400 rounded-full animate-spin" />
+                <span>Reward unlocks in <strong className="text-white">{timeLeft}s</strong>...</span>
               </div>
             ) : (
               <button 
                 onClick={handleClaimReward}
-                className="py-4 px-8 bg-green-500 text-black text-sm font-bold uppercase tracking-widest hover:bg-green-400 transition-colors animate-in fade-in slide-in-from-bottom-4 shadow-[0_0_20px_rgba(34,197,94,0.4)]"
+                className="py-4 px-8 bg-emerald-400 text-black text-xs font-bold uppercase tracking-widest hover:bg-emerald-300 transition-colors animate-in fade-in slide-in-from-bottom-2 shadow-[0_0_24px_rgba(16,185,129,0.4)] rounded-lg cursor-pointer flex items-center gap-2"
               >
-                CLAIM REWARD
+                <CheckCircle2 size={16} />
+                <span>Claim Supporter Badge</span>
               </button>
             )}
           </div>
@@ -173,58 +214,56 @@ export function SupportReward() {
 
       {status === 'completed' && (
         <div ref={successRef} className="max-w-md w-full">
-          <div className="text-green-500 mb-6 opacity-0 flex justify-center">
-            <svg className="w-16 h-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-            </svg>
+          <div className="text-emerald-400 mb-4 opacity-0 flex justify-center">
+            <CheckCircle2 size={48} />
           </div>
-          <h1 className="text-5xl md:text-6xl font-black tracking-tight leading-[0.95] mb-6 uppercase opacity-0">SUPPORT CONFIRMED</h1>
-          <p className="text-zinc-400 mb-12 opacity-0">
-            Thank you for supporting SpatialFlow!
+          <h1 className="text-3xl sm:text-4xl font-black tracking-tight leading-tight mb-2 uppercase text-white opacity-0">
+            Support Confirmed
+          </h1>
+          <p className="text-zinc-400 text-xs sm:text-sm mb-8 opacity-0">
+            Thank you for supporting SpatialFlow development!
           </p>
           
           <div 
             ref={badgeRef}
-            className="bg-zinc-900 border border-cyan-500/50 rounded p-8 mb-8 opacity-0 shadow-[0_0_30px_rgba(6,182,212,0.15)]"
+            className="bg-zinc-900 border border-cyan-500/40 rounded-2xl p-6 sm:p-8 mb-8 opacity-0 shadow-[0_0_30px_rgba(6,182,212,0.15)] text-center"
           >
-            <div className="text-6xl mb-4">🏅</div>
-            <h2 className="text-2xl font-bold mb-2 uppercase tracking-tight">SpatialFlow Supporter</h2>
-            <p className="text-zinc-500 text-sm">
-              Supported the development of SpatialFlow.
+            <div className="text-5xl mb-3">🏅</div>
+            <h2 className="text-xl font-bold mb-1 uppercase tracking-tight text-white">
+              SpatialFlow Supporter
+            </h2>
+            <p className="text-zinc-400 text-xs">
+              Officially recognized supporter of SpatialFlow.
             </p>
           </div>
           
           <div className="opacity-0 space-y-4">
-            <div className="bg-zinc-900 border border-white/5 rounded p-6 mb-4">
-              <p className="text-zinc-300 text-sm mb-4">
-                Please consider starring the repository to help the project grow!
+            <div className="bg-zinc-900/60 border border-white/10 rounded-xl p-5 mb-4 text-left">
+              <p className="text-zinc-300 text-xs mb-3">
+                Help the project reach more music enthusiasts by starring the repository on GitHub!
               </p>
               <a 
                 href="https://github.com/MythicalShub/SpatialFlow"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex w-full items-center justify-center gap-3 py-4 px-6 bg-[#24292e] text-white border border-white/10 text-sm font-bold uppercase tracking-widest hover:bg-[#2f363d] transition-colors"
+                className="inline-flex w-full items-center justify-center gap-2 py-3 px-4 bg-[#24292e] text-white border border-white/10 text-xs font-bold uppercase tracking-wider hover:bg-[#2f363d] transition-colors rounded-lg cursor-pointer"
               >
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" />
-                </svg>
-                STAR ON GITHUB
+                <Star size={14} className="text-amber-400 fill-amber-400" />
+                <span>Star on GitHub</span>
               </a>
             </div>
 
             <button 
               type="button"
               onClick={handleReturnToApp}
-              className="inline-flex items-center justify-center gap-2 w-full py-4 px-6 bg-white text-black text-sm font-bold uppercase tracking-widest hover:bg-gray-200 transition-colors shadow-lg cursor-pointer"
+              className="inline-flex items-center justify-center gap-2 w-full py-4 px-6 bg-white text-black text-xs font-bold uppercase tracking-widest hover:bg-zinc-200 transition-colors shadow-lg rounded-lg cursor-pointer font-sans"
             >
-              <span>RETURN TO SPATIALFLOW APP</span>
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-              </svg>
+              <Smartphone size={16} />
+              <span>Return to SpatialFlow App</span>
             </button>
 
             {deepLinkStatus && (
-              <div className="p-3 bg-zinc-800/80 border border-cyan-500/30 rounded text-xs text-cyan-300 animate-in fade-in">
+              <div className="p-3 bg-zinc-900 border border-cyan-500/30 rounded-lg text-xs text-cyan-300 animate-in fade-in">
                 {deepLinkStatus}
               </div>
             )}
