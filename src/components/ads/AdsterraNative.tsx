@@ -49,7 +49,7 @@ export function AdsterraNative({ className = '' }: AdsterraNativeProps) {
         </a>
       </div>
 
-      <div className="min-h-[120px] w-full rounded-lg bg-zinc-900/60 border border-white/10 p-2 flex items-center justify-center shadow-lg overflow-hidden">
+      <div className="min-h-[120px] w-full rounded-lg bg-black/40 backdrop-blur-md border border-white/10 p-2 flex items-center justify-center shadow-lg overflow-hidden">
         {/* Adsterra Native Container */}
         <div id="container-19ca1d833804d3fe9b15468aa153248d" className="w-full flex justify-center items-center" />
       </div>

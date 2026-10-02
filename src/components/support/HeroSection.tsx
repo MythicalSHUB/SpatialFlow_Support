@@ -67,7 +67,7 @@ export function HeroSection({ onSupportClick }: HeroSectionProps) {
         <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
           
           {/* Badge 1: M3 Asymmetric Squircle */}
-          <div className="p-5 rounded-3xl bg-[#080808]/90 border border-white/10 hover:border-white/20 transition-all flex items-start gap-4">
+          <div className="p-5 rounded-3xl bg-black/40 backdrop-blur-md border border-white/10 hover:border-white/25 hover:bg-black/55 transition-all flex items-start gap-4">
             <div className="w-12 h-12 m3-asymmetric-1 bg-white/5 border border-white/15 flex items-center justify-center text-white shrink-0">
               <Cpu size={22} className="stroke-[1.75]" />
             </div>
@@ -85,7 +85,7 @@ export function HeroSection({ onSupportClick }: HeroSectionProps) {
           </div>
 
           {/* Badge 2: M3 Symmetric Squircle */}
-          <div className="p-5 rounded-3xl bg-[#080808]/90 border border-white/10 hover:border-white/20 transition-all flex items-start gap-4">
+          <div className="p-5 rounded-3xl bg-black/40 backdrop-blur-md border border-white/10 hover:border-white/25 hover:bg-black/55 transition-all flex items-start gap-4">
             <div className="w-12 h-12 m3-squircle bg-white/5 border border-white/15 flex items-center justify-center text-white shrink-0">
               <ShieldCheck size={22} className="stroke-[1.75]" />
             </div>
@@ -103,7 +103,7 @@ export function HeroSection({ onSupportClick }: HeroSectionProps) {
           </div>
 
           {/* Badge 3: M3 Inverted Asymmetric Capsule */}
-          <div className="p-5 rounded-3xl bg-[#080808]/90 border border-white/10 hover:border-white/20 transition-all flex items-start gap-4">
+          <div className="p-5 rounded-3xl bg-black/40 backdrop-blur-md border border-white/10 hover:border-white/25 hover:bg-black/55 transition-all flex items-start gap-4">
             <div className="w-12 h-12 m3-asymmetric-2 bg-white/5 border border-white/15 flex items-center justify-center text-white shrink-0">
               <Music2 size={22} className="stroke-[1.75]" />
             </div>

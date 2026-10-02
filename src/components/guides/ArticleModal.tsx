@@ -25,18 +25,18 @@ export function ArticleModal({ article, onClose }: ArticleModalProps) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md animate-in fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-in fade-in"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
       aria-labelledby="article-modal-title"
     >
       <div
-        className="relative w-full max-w-2xl max-h-[85vh] bg-[#080808] border border-white/20 rounded-3xl shadow-2xl flex flex-col overflow-hidden text-left"
+        className="relative w-full max-w-2xl max-h-[85vh] bg-black/75 backdrop-blur-2xl border border-white/20 rounded-3xl shadow-2xl flex flex-col overflow-hidden text-left"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Top Bar */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-black">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-black/50 backdrop-blur-md">
           <div className="flex items-center gap-2 text-[11px] font-mono uppercase tracking-[0.15em] text-zinc-400">
             <Bookmark size={14} className="text-white" />
             <span>GUIDE</span>
@@ -79,7 +79,7 @@ export function ArticleModal({ article, onClose }: ArticleModalProps) {
           />
 
           {/* Context Footer */}
-          <div className="mt-8 pt-6 border-t border-white/10 bg-[#0C0C0C] p-4 rounded-2xl flex items-center justify-between">
+          <div className="mt-8 pt-6 border-t border-white/10 bg-black/40 backdrop-blur-sm border border-white/10 p-4 rounded-2xl flex items-center justify-between">
             <span className="text-[11px] font-mono text-zinc-400">
               SPATIALFLOW · AUDIO KNOWLEDGE BASE
             </span>

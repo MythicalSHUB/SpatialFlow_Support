@@ -35,7 +35,7 @@ export function CommunitySection() {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => trackEvent('community_link_click', { destination: 'telegram' })}
-            className="p-6 rounded-3xl bg-[#080808] border border-white/10 hover:border-white/30 transition-all flex flex-col justify-between group cursor-pointer"
+            className="p-6 rounded-3xl bg-black/40 backdrop-blur-md border border-white/10 hover:border-white/25 hover:bg-black/55 transition-all flex flex-col justify-between group cursor-pointer"
           >
             <div>
               <div className="w-12 h-12 m3-asymmetric-1 bg-white/5 border border-white/15 flex items-center justify-center text-white mb-4 group-hover:border-white/40 transition-colors">
@@ -63,7 +63,7 @@ export function CommunitySection() {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => trackEvent('community_link_click', { destination: 'github_repo' })}
-            className="p-6 rounded-3xl bg-[#080808] border border-white/10 hover:border-white/30 transition-all flex flex-col justify-between group cursor-pointer"
+            className="p-6 rounded-3xl bg-black/40 backdrop-blur-md border border-white/10 hover:border-white/25 hover:bg-black/55 transition-all flex flex-col justify-between group cursor-pointer"
           >
             <div>
               <div className="w-12 h-12 m3-squircle bg-white/5 border border-white/15 flex items-center justify-center text-white mb-4 group-hover:border-white/40 transition-colors">
@@ -94,7 +94,7 @@ export function CommunitySection() {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => trackEvent('community_link_click', { destination: 'app_download' })}
-            className="p-6 rounded-3xl bg-[#080808] border border-white/10 hover:border-white/30 transition-all flex flex-col justify-between group cursor-pointer"
+            className="p-6 rounded-3xl bg-black/40 backdrop-blur-md border border-white/10 hover:border-white/25 hover:bg-black/55 transition-all flex flex-col justify-between group cursor-pointer"
           >
             <div>
               <div className="w-12 h-12 m3-asymmetric-2 bg-white/5 border border-white/15 flex items-center justify-center text-white mb-4 group-hover:border-white/40 transition-colors">

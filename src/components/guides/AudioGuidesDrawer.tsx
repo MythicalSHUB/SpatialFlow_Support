@@ -30,18 +30,18 @@ export function AudioGuidesDrawer({ isOpen, onClose }: AudioGuidesDrawerProps) {
   return (
     <>
       <div 
-        className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm animate-in fade-in"
+        className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md animate-in fade-in"
         onClick={onClose}
         role="dialog"
         aria-modal="true"
         aria-labelledby="drawer-title"
       >
         <div 
-          className="absolute right-0 top-0 bottom-0 w-full max-w-lg bg-[#080808] border-l border-white/15 shadow-2xl flex flex-col text-left overflow-hidden animate-in slide-in-from-right duration-300"
+          className="absolute right-0 top-0 bottom-0 w-full max-w-lg bg-black/75 backdrop-blur-2xl border-l border-white/15 shadow-2xl flex flex-col text-left overflow-hidden animate-in slide-in-from-right duration-300"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Drawer Header */}
-          <div className="p-6 border-b border-white/10 bg-black flex items-center justify-between">
+          <div className="p-6 border-b border-white/10 bg-black/50 backdrop-blur-md flex items-center justify-between">
             <div className="flex items-center gap-3.5">
               <div className="w-11 h-11 m3-squircle bg-white/5 border border-white/20 flex items-center justify-center text-white">
                 <BookOpen size={20} className="stroke-[1.75]" />
@@ -66,7 +66,7 @@ export function AudioGuidesDrawer({ isOpen, onClose }: AudioGuidesDrawerProps) {
           </div>
 
           {/* Category Filter Pills (Material 3 Expressive Pills) */}
-          <div className="px-6 py-3 border-b border-white/5 bg-[#0A0A0A] flex items-center gap-2 overflow-x-auto no-scrollbar">
+          <div className="px-6 py-3 border-b border-white/5 bg-black/40 backdrop-blur-sm flex items-center gap-2 overflow-x-auto no-scrollbar">
             {categories.map((cat) => (
               <button
                 key={cat.id}
@@ -91,7 +91,7 @@ export function AudioGuidesDrawer({ isOpen, onClose }: AudioGuidesDrawerProps) {
                   trackEvent('audio_guide_view', { articleId: article.id, category: article.category });
                   setActiveArticle(article);
                 }}
-                className="w-full text-left p-4 rounded-2xl bg-[#0F0F0F] border border-white/10 hover:border-white/30 transition-all flex items-start justify-between gap-3 group cursor-pointer"
+                className="w-full text-left p-4 rounded-2xl bg-black/40 backdrop-blur-md border border-white/10 hover:border-white/30 hover:bg-black/60 transition-all flex items-start justify-between gap-3 group cursor-pointer"
               >
                 <div>
                   <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-wider text-zinc-400 mb-1 font-semibold">
@@ -116,7 +116,7 @@ export function AudioGuidesDrawer({ isOpen, onClose }: AudioGuidesDrawerProps) {
           </div>
 
           {/* Drawer Footer */}
-          <div className="p-4 border-t border-white/10 bg-black text-center font-mono text-[10px] text-zinc-500 uppercase tracking-widest">
+          <div className="p-4 border-t border-white/10 bg-black/50 backdrop-blur-md text-center font-mono text-[10px] text-zinc-500 uppercase tracking-widest">
             SPATIALFLOW · OPEN AUDIO ENGINEERING
           </div>
         </div>

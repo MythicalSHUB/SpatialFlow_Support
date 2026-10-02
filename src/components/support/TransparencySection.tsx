@@ -61,7 +61,7 @@ export function TransparencySection() {
           {TRANSPARENCY_PILLARS.map((pillar, idx) => (
             <div
               key={pillar.id}
-              className="p-6 rounded-3xl bg-[#080808] border border-white/10 hover:border-white/25 transition-all flex flex-col justify-between group"
+              className="p-6 rounded-3xl bg-black/40 backdrop-blur-md border border-white/10 hover:border-white/25 hover:bg-black/55 transition-all flex flex-col justify-between group"
             >
               <div>
                 <div className="flex items-center justify-between mb-4">
@@ -93,7 +93,7 @@ export function TransparencySection() {
         </div>
 
         {/* Why Support SpatialFlow Callout Banner */}
-        <div id="mission" className="p-8 sm:p-10 rounded-3xl bg-[#080808] bg-nothing-grid-dense border border-white/15 relative overflow-hidden">
+        <div id="mission" className="p-8 sm:p-10 rounded-3xl bg-black/45 backdrop-blur-md border border-white/15 relative overflow-hidden">
           <div className="max-w-3xl">
             <div className="flex items-center gap-2 mb-3 text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-400">
               <span>PROJECT PRINCIPLES</span>

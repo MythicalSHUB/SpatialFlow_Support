@@ -132,7 +132,7 @@ export function SupportReward() {
             Support the ongoing development of SpatialFlow without spending money. Complete a short sponsored experience to receive a permanent badge in your Android app.
           </p>
           
-          <div className="bg-[#080808] bg-[radial-gradient(#ffffff15_1px,transparent_1px)] [background-size:12px_12px] border border-white/15 hover:border-white/30 rounded-3xl p-6 sm:p-8 mb-8 opacity-0 text-left shadow-2xl relative overflow-hidden">
+          <div className="bg-black/45 backdrop-blur-md border border-white/15 hover:border-white/30 rounded-3xl p-6 sm:p-8 mb-8 opacity-0 text-left shadow-2xl relative overflow-hidden">
             <div className="flex items-center gap-4 mb-5">
               <div className="w-14 h-14 rounded-2xl bg-black border border-white/20 flex flex-col items-center justify-center relative shrink-0">
                 <div className="w-8 h-8 rounded-full border border-dashed border-white/40 flex items-center justify-center">
@@ -226,7 +226,7 @@ export function SupportReward() {
           
           <div 
             ref={badgeRef}
-            className="bg-zinc-900 border border-cyan-500/40 rounded-2xl p-6 sm:p-8 mb-8 opacity-0 shadow-[0_0_30px_rgba(6,182,212,0.15)] text-center"
+            className="bg-black/50 backdrop-blur-md border border-white/20 rounded-2xl p-6 sm:p-8 mb-8 opacity-0 shadow-[0_0_30px_rgba(255,255,255,0.1)] text-center"
           >
             <div className="text-5xl mb-3">🏅</div>
             <h2 className="text-xl font-bold mb-1 uppercase tracking-tight text-white">
@@ -238,7 +238,7 @@ export function SupportReward() {
           </div>
           
           <div className="opacity-0 space-y-4">
-            <div className="bg-zinc-900/60 border border-white/10 rounded-xl p-5 mb-4 text-left">
+            <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-xl p-5 mb-4 text-left">
               <p className="text-zinc-300 text-xs mb-3">
                 Help the project reach more music enthusiasts by starring the repository on GitHub!
               </p>

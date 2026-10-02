@@ -49,7 +49,7 @@ export function SupportOptions() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
           
           {/* Card: Free Supporter Badge (Rewarded Ad Flow) - Nothing OS Themed Marquee on Top */}
-          <div className="col-span-full p-6 sm:p-8 rounded-3xl bg-[#080808] bg-nothing-grid border border-white/15 hover:border-white/30 transition-all duration-300 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.8)] group">
+          <div className="col-span-full p-6 sm:p-8 rounded-3xl bg-black/45 backdrop-blur-md border border-white/20 hover:border-white/35 transition-all duration-300 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.5)] group">
             
             <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center gap-5">
               {/* Material 3 Expressive Asymmetric Hardware Glyph Badge */}
@@ -94,7 +94,7 @@ export function SupportOptions() {
           </div>
 
           {/* Card 1: UPI Direct & QR Code (Zero Fees) */}
-          <div className="p-6 rounded-3xl bg-[#080808] border border-white/15 hover:border-white/30 transition-all flex flex-col justify-between group">
+          <div className="p-6 rounded-3xl bg-black/40 backdrop-blur-md border border-white/15 hover:border-white/30 hover:bg-black/55 transition-all flex flex-col justify-between group">
             <div>
               <div className="flex items-center justify-between mb-4">
                 {/* M3 Expressive Squircle Container */}
@@ -115,7 +115,7 @@ export function SupportOptions() {
               </p>
 
               {/* Monospaced ID Box */}
-              <div className="bg-black border border-white/10 rounded-xl p-3 mb-5 flex items-center justify-between">
+              <div className="bg-black/60 backdrop-blur-sm border border-white/10 rounded-xl p-3 mb-5 flex items-center justify-between">
                 <code className="text-xs font-mono text-zinc-300 truncate">
                   {links.upi.id}
                 </code>
@@ -143,7 +143,7 @@ export function SupportOptions() {
           </div>
 
           {/* Card 2: Ko-fi */}
-          <div className="p-6 rounded-3xl bg-[#080808] border border-white/10 hover:border-white/25 transition-all flex flex-col justify-between group">
+          <div className="p-6 rounded-3xl bg-black/40 backdrop-blur-md border border-white/10 hover:border-white/25 hover:bg-black/55 transition-all flex flex-col justify-between group">
             <div>
               <div className="flex items-center justify-between mb-4">
                 {/* M3 Expressive Asymmetric Container */}
@@ -177,7 +177,7 @@ export function SupportOptions() {
           </div>
 
           {/* Card 3: GitHub Sponsors */}
-          <div className="p-6 rounded-3xl bg-[#080808] border border-white/10 hover:border-white/25 transition-all flex flex-col justify-between group">
+          <div className="p-6 rounded-3xl bg-black/40 backdrop-blur-md border border-white/10 hover:border-white/25 hover:bg-black/55 transition-all flex flex-col justify-between group">
             <div>
               <div className="flex items-center justify-between mb-4">
                 {/* M3 Expressive Asymmetric Container */}
@@ -211,7 +211,7 @@ export function SupportOptions() {
           </div>
 
           {/* Card 4: Buy Me a Coffee */}
-          <div className="p-6 rounded-3xl bg-[#080808] border border-white/10 hover:border-white/25 transition-all flex flex-col justify-between group">
+          <div className="p-6 rounded-3xl bg-black/40 backdrop-blur-md border border-white/10 hover:border-white/25 hover:bg-black/55 transition-all flex flex-col justify-between group">
             <div>
               <div className="flex items-center justify-between mb-4">
                 {/* M3 Expressive Faceted Container */}

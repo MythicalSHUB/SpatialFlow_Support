@@ -46,14 +46,14 @@ export function UpiQrModal({ isOpen, onClose }: UpiQrModalProps) {
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-in fade-in duration-200"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
       aria-labelledby="upi-modal-title"
     >
       <div 
-        className="relative w-full max-w-md bg-[#080808] border border-white/20 rounded-3xl p-6 sm:p-8 shadow-2xl text-left"
+        className="relative w-full max-w-md bg-black/75 backdrop-blur-xl border border-white/20 rounded-3xl p-6 sm:p-8 shadow-2xl text-left"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
@@ -103,7 +103,7 @@ export function UpiQrModal({ isOpen, onClose }: UpiQrModalProps) {
           <label className="block text-[10px] font-mono text-zinc-400 uppercase tracking-widest mb-1.5">
             UPI Virtual Payment Address
           </label>
-          <div className="flex items-center gap-2 bg-black border border-white/15 rounded-xl p-2.5">
+          <div className="flex items-center gap-2 bg-black/60 backdrop-blur-sm border border-white/15 rounded-xl p-2.5">
             <code className="text-xs font-mono text-white flex-1 truncate px-1">
               {upi.id}
             </code>
