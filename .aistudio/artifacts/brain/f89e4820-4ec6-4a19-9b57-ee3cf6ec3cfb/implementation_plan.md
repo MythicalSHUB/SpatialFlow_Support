@@ -1,46 +1,60 @@
-# Performance Optimization & Lag Elimination Plan
+# Clean Single-Page Donation Hub Simplification Plan
 
-This plan resolves browser stutter and frame drops by re-engineering the background dither animation with direct `ImageData` 32-bit pixel buffer rendering, isolating GPU composition layers for backdrop blur, and lazy-loading ad banners to prevent main-thread contention.
+This plan declutters the application from a heavy, multi-section marketing site into a clean, focused, high-converting **Support & Donation Hub** centered directly around contribution methods (PayPal, UPI, Ko-fi, GitHub Sponsors, and Free Rewarded Badge), while keeping all ad placements and revenue streams intact.
 
 ---
 
-## Root Causes of Lag Identified
+## User Decisions & Confirmed Architecture
 
-1. **CPU Draw-Call Bottleneck in Canvas**:
-   - `RailwayDitherBackground.tsx` previously executed up to **57,600 individual `ctx.fillRect()` and `ctx.fillStyle` state changes** and thousands of `Math.sin`/`Math.cos`/`Math.exp` trigonometric calculations every frame on the main thread.
-2. **GPU Re-rasterization Bottleneck from Backdrop Blur**:
-   - Applying `backdrop-blur-md` across multiple large containers over an active, re-drawing canvas forces the GPU to constantly re-sample and blur tens of thousands of animating pixels per frame across multiple composite layers.
-3. **Simultaneous Ad Iframe Spawning**:
-   - Multiple Adsterra iframes and script invocations loading in parallel without throttling competed for CPU resources during initial rendering.
+> [!IMPORTANT]
+> The following parameters have been confirmed:
+> - **Page Structure**: Clean single-page donation hub prioritizing direct payment options and community links without visual bloat (`Hero` $\rightarrow$ `Payment Cards & Tiers` $\rightarrow$ `Compact Trust Bar` $\rightarrow$ `Community`).
+> - **Ad Placements**: Kept as is (top leaderboard, mid-page in-feed, native sponsored feed, pre-community banner, and persistent floating bottom sticky bar).
+> - **Direct Support Integrity**: Strict `data-no-ad="true"` on all payment buttons (PayPal, UPI, Ko-fi, GitHub) so donors encounter zero popunder interruptions.
 
 ---
 
 ## 1. Technical Implementation Details
 
-### A. Direct 32-bit `ImageData` Pixel Buffer Engine (`src/components/ui/RailwayDitherBackground.tsx`)
-- Replace 57,600 `ctx.fillRect()` canvas calls with a single low-overhead offscreen `ImageData` buffer:
-  - Operate on a `Uint32Array` view (`buf32`) where writing a pixel is a single memory write: `data32[idx] = 0xbfd4d4d4` (bright) or `0x1fd4d4d4` (dim).
-  - Use an internal low-resolution grid (scaled by CSS `image-rendering: pixelated`) so the canvas only updates $\approx 180 \times 100$ cells ($18,000$ operations instead of 60,000+), executing in $< 0.8\text{ ms}$ per frame.
-  - Pre-compute a sine lookup table (LUT) to eliminate repeated `Math.sin`/`Math.cos` calls in inner loops.
-  - Pause animation when the tab is blurred or when the canvas is scrolled out of viewport.
+### A. Streamlined Hero Header (`src/components/support/HeroSection.tsx`)
+- Focus strictly on the mission: a clean, elegant headline with live GitHub release badge (`v1.8.2`), single-sentence overview, and instant jump button to payment options.
+- Remove duplicate secondary spec cards that contributed to visual clutter.
 
-### B. GPU Layer Isolation & Composite Optimization (`index.css` & Card Containers)
-- Add hardware acceleration hints (`transform: translateZ(0)`, `contain: paint`) to the background canvas container to separate it from the DOM layout tree.
-- Optimize backdrop filters with `will-change: backdrop-filter, transform` so GPU caches glass surfaces rather than continuously re-rasterizing the entire layout tree.
+### B. Core Donation Hub (`src/components/support/SupportOptions.tsx`)
+- Elevated directly under the Hero as the primary focus of the page.
+- Beautiful, high-contrast, uncluttered frosted glass cards:
+  - **Free Rewarded Supporter Badge**: Top high-CTR feature card with instant access to `/reward`.
+  - **PayPal Direct**: `paypal.me/ShubhamKarande787` for instant worldwide card/balance transfers.
+  - **UPI Direct & QR**: 0% platform fee for Google Pay, PhonePe, Paytm, BHIM.
+  - **Ko-fi Tip**: Quick credit card or PayPal donation.
+  - **GitHub Sponsors**: Open-source developer sponsorship.
 
-### C. Lazy-Loaded Non-Blocking Ad Iframes (`src/components/ads/AdsterraBanner.tsx` & `AdSlot.tsx`)
-- Add `loading="lazy"` and an `IntersectionObserver` to only mount and execute Adsterra iframes when scrolled near the viewport.
-- Stagger ad script execution so the initial page paint completes instantly without main thread blocking.
+### C. Compact Trust & Transparency Bar (`src/components/support/TransparencySection.tsx`)
+- Replace the large, repetitive multi-tier grid with a sleek, minimalist trust bar:
+  - 3 clear pillars: *100% In-App Ad-Free* · *Bit-Perfect Audio DSP* · *Direct Developer Funding (Apache-2.0)*.
+  - Saves vertical scroll height and keeps the page feeling light, purposeful, and modern.
+
+### D. Clean Page Flow (`src/pages/Support.tsx`)
+- Sequence:
+  1. Top Leaderboard Banner
+  2. Hero Header
+  3. Mid-Page In-Feed Banner (kept as requested)
+  4. Core Donation Hub (`SupportOptions`)
+  5. High-CTR Native Sponsored Feed (kept as requested)
+  6. Compact Trust Bar
+  7. Pre-Community Banner (kept as requested)
+  8. Community & Code Links (`CommunitySection`)
+  9. Persistent Sticky Bottom Sponsor Bar
 
 ---
 
 ## 2. Verification Plan
 
-1. **Performance Profiling**:
-   - Confirm animation loop completes in $< 1.5\text{ ms}$ (comfortably under the 16.6ms budget for 60fps).
-   - Ensure zero dropped frames during fast scrolling.
-2. **Quality & Visual Fidelity**:
-   - Verify dither dots and interactive mouse flares retain their aesthetic Nothing OS / Railway style.
-   - Confirm all ad slots render cleanly without overlapping or layout shift.
+1. **Visual Hierarchy & Clarity**:
+   - Verify the page immediately communicates "Support SpatialFlow" with payment cards visible without excessive scrolling.
+   - Confirm uncluttered, calm Nothing OS aesthetic with Bayer dither background.
+2. **Payment & Ad Isolation**:
+   - Ensure clicking PayPal, UPI, Ko-fi, or GitHub directly initiates the payment action without any ad popunders.
+   - Ensure all ad banners load smoothly with zero page lag.
 3. **Build & Lint Verification**:
-   - Run `lint_applet` and `compile_applet` to ensure pristine compilation.
+   - Run `lint_applet` and `compile_applet`.

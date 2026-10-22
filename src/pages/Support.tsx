@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { HeroSection } from '../components/support/HeroSection';
-import { TransparencySection } from '../components/support/TransparencySection';
 import { SupportOptions } from '../components/support/SupportOptions';
+import { TransparencySection } from '../components/support/TransparencySection';
 import { CommunitySection } from '../components/support/CommunitySection';
 import { AdSlot } from '../components/ads/AdSlot';
 import { AdsterraNative } from '../components/ads/AdsterraNative';
@@ -26,31 +26,31 @@ export function Support() {
         <AdSlot variant="leaderboard" />
       </div>
 
-      {/* Hero Section */}
+      {/* Hero Header */}
       <HeroSection onSupportClick={scrollToSupport} />
 
-      {/* 2. Mid-Page In-Feed Ad Unit (Between Hero & Transparency) */}
+      {/* 2. Mid-Page In-Feed Ad Unit */}
       <div className="w-full py-4 px-4 flex flex-col items-center border-b border-white/10 bg-black/40 backdrop-blur-sm">
         <AdSlot variant="rectangle" />
       </div>
 
-      {/* Transparency & Costs Section */}
-      <TransparencySection />
+      {/* Core Support & Payment Hub (PayPal, UPI, Ko-fi, GitHub, Free Badge) */}
+      <SupportOptions />
 
       {/* 3. High-CTR Native Sponsored Feed Unit */}
       <div className="w-full py-4 px-4 flex justify-center border-t border-b border-white/10 bg-black/50 backdrop-blur-md">
         <AdsterraNative />
       </div>
 
-      {/* Multi-Tier Contribution & Support Options */}
-      <SupportOptions />
+      {/* Compact Trust & Impact Bar */}
+      <TransparencySection />
 
       {/* 4. Pre-Community High-Visibility Leaderboard Ad */}
       <div className="w-full py-4 px-4 flex flex-col items-center border-t border-b border-white/10 bg-black/40 backdrop-blur-sm">
         <AdSlot variant="leaderboard" />
       </div>
 
-      {/* Community, Discussion & GitHub Repository */}
+      {/* Community & Ecosystem Links */}
       <CommunitySection />
     </div>
   );

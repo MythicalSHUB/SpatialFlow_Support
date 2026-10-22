@@ -21,7 +21,7 @@ export interface SupportMethod {
 
 export const SPATIALFLOW_CONFIG = {
   name: 'SpatialFlow',
-  version: 'v1.8.1',
+  version: 'v1.8.2',
   tagline: 'Independent Android Music Experience',
   subheading: 'High-fidelity local playback, online streaming, and intelligent real-time DSP.',
   author: 'MythicalShub (Shubham Karande)',
@@ -32,7 +32,7 @@ export const SPATIALFLOW_CONFIG = {
     appWebsite: 'https://spatialflow.vercel.app/',
     telegram: 'https://t.me/SpatialFlow',
     github: 'https://github.com/MythicalShub/SpatialFlow',
-    githubReleases: 'https://spatialflow.vercel.app/',
+    githubReleases: 'https://github.com/MythicalShub/SpatialFlow/releases',
     paypal: 'https://paypal.me/ShubhamKarande787',
     githubSponsors: 'https://github.com/sponsors/MythicalShub',
     kofi: 'https://ko-fi.com/mythicalshub',

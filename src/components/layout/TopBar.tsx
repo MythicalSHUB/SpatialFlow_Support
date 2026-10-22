@@ -32,24 +32,17 @@ export function TopBar({ onOpenGuides }: TopBarProps) {
         <nav className="hidden md:flex items-center gap-7 text-[11px] font-mono uppercase tracking-[0.15em] text-zinc-400">
           <button 
             data-no-ad="true"
-            onClick={() => scrollToSection('mission')}
+            onClick={() => scrollToSection('support-options')}
             className="hover:text-white transition-colors cursor-pointer"
           >
-            Mission
+            Donate Options
           </button>
           <button 
             data-no-ad="true"
             onClick={() => scrollToSection('transparency')}
             className="hover:text-white transition-colors cursor-pointer"
           >
-            Costs & Allocation
-          </button>
-          <button 
-            data-no-ad="true"
-            onClick={() => scrollToSection('support-options')}
-            className="hover:text-white transition-colors cursor-pointer"
-          >
-            Ways to Support
+            Trust & Impact
           </button>
           <a
             data-no-ad="true"

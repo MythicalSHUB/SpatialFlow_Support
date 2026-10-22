@@ -1,6 +1,6 @@
 {
-  "summary":  "Implementation plan to fix all site lag by rebuilding the background dither canvas with an ultra-fast ImageData 32-bit pixel buffer, GPU layer isolation, and lazy-loaded ad iframes.",
-  "updatedAt":  "2026-10-22T08:52:23.425022865Z",
+  "summary":  "Implementation plan to simplify the support website into a clean, focused single-page donation hub (Hero, Payment Cards, Compact Trust Bar, Community) while preserving all ad placements and revenue streams.",
+  "updatedAt":  "2026-10-22T09:10:12.340175311Z",
   "requestFeedback":  true,
   "userFacing":  true
 }
