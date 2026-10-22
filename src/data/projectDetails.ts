@@ -33,6 +33,7 @@ export const SPATIALFLOW_CONFIG = {
     telegram: 'https://t.me/SpatialFlow',
     github: 'https://github.com/MythicalShub/SpatialFlow',
     githubReleases: 'https://spatialflow.vercel.app/',
+    paypal: 'https://paypal.me/ShubhamKarande787',
     githubSponsors: 'https://github.com/sponsors/MythicalShub',
     kofi: 'https://ko-fi.com/mythicalshub',
     buyMeACoffee: 'https://buymeacoffee.com/mythicalshub',

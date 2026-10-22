@@ -1,6 +1,6 @@
 {
-  "summary":  "Implementation plan to replace all solid background containers with frosted glass backdrop blur styling so the dither animation seamlessly flows through cards, tiers, modals, and drawers.",
-  "updatedAt":  "2026-10-02T09:36:36.925581162Z",
+  "summary":  "Implementation plan to fix all site lag by rebuilding the background dither canvas with an ultra-fast ImageData 32-bit pixel buffer, GPU layer isolation, and lazy-loaded ad iframes.",
+  "updatedAt":  "2026-10-22T08:52:23.425022865Z",
   "requestFeedback":  true,
   "userFacing":  true
 }

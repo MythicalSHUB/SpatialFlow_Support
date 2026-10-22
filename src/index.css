@@ -87,3 +87,24 @@ body {
   width: 0%;
   transform-origin: left;
 }
+
+/* GPU Hardware Layer Promotion & Performance Optimizations */
+html {
+  scroll-behavior: smooth;
+  text-rendering: optimizeSpeed;
+}
+
+canvas {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Ensure backdrop blur uses GPU compositor layers without repainting DOM */
+.backdrop-blur-sm,
+.backdrop-blur-md,
+.backdrop-blur-xl,
+.backdrop-blur-2xl {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+

@@ -76,6 +76,9 @@ export function SupportReward() {
 
   const handleClaimReward = () => {
     trackEvent('reward_claimed');
+    try {
+      window.open(ADSTERRA_SMARTLINK, '_blank', 'noopener,noreferrer');
+    } catch (_) {}
     setStatus('completed');
   };
 

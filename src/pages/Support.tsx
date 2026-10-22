@@ -21,24 +21,34 @@ export function Support() {
 
   return (
     <div className="w-full flex flex-col bg-transparent">
-      {/* Top Leaderboard Ad Slot */}
-      <div className="w-full pt-4 pb-2 px-4 flex flex-col items-center border-b border-white/10 bg-black/60 backdrop-blur-sm">
+      {/* 1. Top Leaderboard Banner */}
+      <div className="w-full pt-3 pb-1 px-4 flex flex-col items-center border-b border-white/10 bg-black/60 backdrop-blur-md">
         <AdSlot variant="leaderboard" />
       </div>
 
       {/* Hero Section */}
       <HeroSection onSupportClick={scrollToSupport} />
 
-      {/* Trust & Transparency Section (4 Pillars + Philosophy) */}
+      {/* 2. Mid-Page In-Feed Ad Unit (Between Hero & Transparency) */}
+      <div className="w-full py-4 px-4 flex flex-col items-center border-b border-white/10 bg-black/40 backdrop-blur-sm">
+        <AdSlot variant="rectangle" />
+      </div>
+
+      {/* Transparency & Costs Section */}
       <TransparencySection />
 
-      {/* In-Content Native Ad Placement */}
-      <div className="w-full py-6 px-4 flex justify-center border-t border-b border-white/10 bg-black/60 backdrop-blur-sm">
+      {/* 3. High-CTR Native Sponsored Feed Unit */}
+      <div className="w-full py-4 px-4 flex justify-center border-t border-b border-white/10 bg-black/50 backdrop-blur-md">
         <AdsterraNative />
       </div>
 
       {/* Multi-Tier Contribution & Support Options */}
       <SupportOptions />
+
+      {/* 4. Pre-Community High-Visibility Leaderboard Ad */}
+      <div className="w-full py-4 px-4 flex flex-col items-center border-t border-b border-white/10 bg-black/40 backdrop-blur-sm">
+        <AdSlot variant="leaderboard" />
+      </div>
 
       {/* Community, Discussion & GitHub Repository */}
       <CommunitySection />

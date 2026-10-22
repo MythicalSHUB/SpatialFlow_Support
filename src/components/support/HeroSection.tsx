@@ -1,6 +1,8 @@
-import { Music2, ShieldCheck, Cpu, ArrowUpRight } from 'lucide-react';
+import { Music2, ShieldCheck, Cpu, ArrowUpRight, Award, Heart } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { SPATIALFLOW_CONFIG } from '../../data/projectDetails';
 import { trackEvent } from '../../lib/analytics';
+import { triggerDirectSmartlink } from '../../lib/adsterraClickTrigger';
 
 interface HeroSectionProps {
   onSupportClick: () => void;
@@ -8,7 +10,7 @@ interface HeroSectionProps {
 
 export function HeroSection({ onSupportClick }: HeroSectionProps) {
   return (
-    <section className="relative w-full pt-16 pb-20 md:pt-24 md:pb-28 bg-transparent border-b border-white/10 overflow-hidden">
+    <section className="relative w-full pt-12 pb-16 md:pt-20 md:pb-24 bg-transparent border-b border-white/10 overflow-hidden">
       
       {/* Subtle radial ambient vignette */}
       <div 
@@ -18,105 +20,107 @@ export function HeroSection({ onSupportClick }: HeroSectionProps) {
 
       <div className="relative max-w-5xl mx-auto px-4 sm:px-6 text-center flex flex-col items-center">
         
-        {/* Clean Monospaced Eyebrow without slashes or red dots */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/15 mb-6 text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-300">
-          <span>PROJECT</span>
-          <span className="text-zinc-600">·</span>
+        {/* Clean Eyebrow Badge */}
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/5 border border-white/15 mb-5 text-[11px] font-mono uppercase tracking-[0.2em] text-zinc-300">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
           <span>SPATIALFLOW {SPATIALFLOW_CONFIG.version}</span>
           <span className="text-zinc-600">·</span>
-          <span className="text-zinc-400">OPEN SOURCE AUDIO</span>
+          <span className="text-zinc-400">OPEN AUDIO</span>
         </div>
 
         {/* Primary Headline in Dot Matrix */}
-        <h1 className="font-ndot text-3xl sm:text-5xl md:text-6xl text-white tracking-widest uppercase max-w-4xl leading-[1.08] mb-6">
-          KEEP INDEPENDENT ANDROID AUDIO RUNNING
+        <h1 className="font-ndot text-3xl sm:text-5xl md:text-6xl text-white tracking-widest uppercase max-w-4xl leading-[1.05] mb-4">
+          LOSSLESS AUDIO. ZERO IN-APP ADS.
         </h1>
 
-        {/* Clear, Trustworthy Subhead in Clean Grotesque */}
-        <p className="text-sm sm:text-base md:text-lg text-zinc-400 max-w-2xl leading-relaxed mb-10 font-sans">
-          SpatialFlow is an independent Android music player engineered with native Jetpack Compose, dynamic Material 3 design, lossless playback, and real-time DSP effects. Built without corporate telemetry or invasive subscriptions.
+        {/* Concise, Clear Subhead (Less Typo) */}
+        <p className="text-sm sm:text-base text-zinc-300 max-w-xl leading-relaxed mb-8 font-sans">
+          Independent, high-fidelity Android player with bit-perfect DSP and dynamic Material 3 design. 100% free and private.
         </p>
 
-        {/* Action CTAs: Support SpatialFlow & Download Android App */}
-        <div className="w-full sm:w-auto flex flex-col sm:flex-row items-center gap-4 mb-16">
+        {/* High-Converting Action CTAs */}
+        <div className="w-full sm:w-auto flex flex-wrap items-center justify-center gap-3.5 mb-14">
           <button
+            data-no-ad="true"
             onClick={() => {
               trackEvent('hero_support_click', { source: 'hero_primary' });
               onSupportClick();
             }}
-            className="w-full sm:w-auto px-8 py-4 rounded-full bg-white hover:bg-neutral-200 text-black text-xs font-mono font-bold uppercase tracking-widest transition-all shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:scale-[1.02] active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-white hover:bg-neutral-200 text-black text-xs font-mono font-bold uppercase tracking-widest transition-all shadow-[0_0_30px_rgba(255,255,255,0.25)] hover:scale-[1.02] active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2"
           >
-            <span>Support SpatialFlow</span>
+            <Heart size={15} className="fill-black" />
+            <span>SUPPORT PROJECT</span>
           </button>
 
+          <Link
+            data-no-ad="true"
+            to="/reward"
+            onClick={() => {
+              trackEvent('hero_badge_click', { source: 'hero_badge' });
+            }}
+            className="w-full sm:w-auto px-7 py-3.5 rounded-full bg-cyan-400 hover:bg-cyan-300 text-black text-xs font-mono font-bold uppercase tracking-widest transition-all shadow-[0_0_25px_rgba(6,182,212,0.3)] hover:scale-[1.02] active:scale-[0.98] cursor-pointer flex items-center justify-center gap-2"
+          >
+            <Award size={15} />
+            <span>FREE SUPPORTER BADGE</span>
+          </Link>
+
           <a
+            data-no-ad="true"
             href={SPATIALFLOW_CONFIG.links.downloadApp}
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => {
               trackEvent('download_app_click', { source: 'hero_secondary' });
             }}
-            className="w-full sm:w-auto px-7 py-4 rounded-full bg-transparent hover:bg-white/5 border border-dashed border-white/30 hover:border-white/60 text-white text-xs font-mono uppercase tracking-widest transition-colors cursor-pointer flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-6 py-3.5 rounded-full bg-black/60 hover:bg-white/10 border border-white/20 text-white text-xs font-mono uppercase tracking-widest transition-colors cursor-pointer flex items-center justify-center gap-2 backdrop-blur-sm"
           >
-            <span>Download Android App</span>
-            <ArrowUpRight size={15} />
+            <span>GET ANDROID APK</span>
+            <ArrowUpRight size={14} />
           </a>
         </div>
 
-        {/* Material 3 Expressive Geometric Spec Cards */}
+        {/* 3 Clear, Streamlined Feature Cards */}
         <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
           
-          {/* Badge 1: M3 Asymmetric Squircle */}
-          <div className="p-5 rounded-3xl bg-black/40 backdrop-blur-md border border-white/10 hover:border-white/25 hover:bg-black/55 transition-all flex items-start gap-4">
-            <div className="w-12 h-12 m3-asymmetric-1 bg-white/5 border border-white/15 flex items-center justify-center text-white shrink-0">
-              <Cpu size={22} className="stroke-[1.75]" />
+          <div className="p-4 rounded-2xl bg-black/40 backdrop-blur-md border border-white/10 hover:border-white/25 transition-all flex items-center gap-3.5">
+            <div className="w-10 h-10 m3-asymmetric-1 bg-white/5 border border-white/15 flex items-center justify-center text-white shrink-0">
+              <Cpu size={18} className="stroke-[1.75]" />
             </div>
             <div>
-              <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 mb-1">
-                ENGINE ARCHITECTURE
-              </div>
-              <div className="text-sm font-bold text-white mb-0.5">
+              <div className="text-xs font-bold text-white uppercase tracking-wider">
                 Native Kotlin & Compose
               </div>
-              <p className="text-xs text-zinc-400 leading-relaxed">
-                Zero legacy web wrappers. ExoPlayer 2 + MediaSession3 low-latency pipeline.
-              </p>
+              <div className="text-[11px] text-zinc-400 font-sans">
+                ExoPlayer 2 low-latency audio engine
+              </div>
             </div>
           </div>
 
-          {/* Badge 2: M3 Symmetric Squircle */}
-          <div className="p-5 rounded-3xl bg-black/40 backdrop-blur-md border border-white/10 hover:border-white/25 hover:bg-black/55 transition-all flex items-start gap-4">
-            <div className="w-12 h-12 m3-squircle bg-white/5 border border-white/15 flex items-center justify-center text-white shrink-0">
-              <ShieldCheck size={22} className="stroke-[1.75]" />
+          <div className="p-4 rounded-2xl bg-black/40 backdrop-blur-md border border-white/10 hover:border-white/25 transition-all flex items-center gap-3.5">
+            <div className="w-10 h-10 m3-squircle bg-white/5 border border-white/15 flex items-center justify-center text-white shrink-0">
+              <ShieldCheck size={18} className="stroke-[1.75]" />
             </div>
             <div>
-              <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 mb-1">
-                PRIVACY GUARANTEE
+              <div className="text-xs font-bold text-white uppercase tracking-wider">
+                100% In-App Ad-Free
               </div>
-              <div className="text-sm font-bold text-white mb-0.5">
-                100% Zero In-App Ads
+              <div className="text-[11px] text-zinc-400 font-sans">
+                Zero tracking, analytics, or user profiling
               </div>
-              <p className="text-xs text-zinc-400 leading-relaxed">
-                Zero telemetry, analytics trackers, or user profiling in your music player.
-              </p>
             </div>
           </div>
 
-          {/* Badge 3: M3 Inverted Asymmetric Capsule */}
-          <div className="p-5 rounded-3xl bg-black/40 backdrop-blur-md border border-white/10 hover:border-white/25 hover:bg-black/55 transition-all flex items-start gap-4">
-            <div className="w-12 h-12 m3-asymmetric-2 bg-white/5 border border-white/15 flex items-center justify-center text-white shrink-0">
-              <Music2 size={22} className="stroke-[1.75]" />
+          <div className="p-4 rounded-2xl bg-black/40 backdrop-blur-md border border-white/10 hover:border-white/25 transition-all flex items-center gap-3.5">
+            <div className="w-10 h-10 m3-asymmetric-2 bg-white/5 border border-white/15 flex items-center justify-center text-white shrink-0">
+              <Music2 size={18} className="stroke-[1.75]" />
             </div>
             <div>
-              <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 mb-1">
-                AUDIO FIDELITY
+              <div className="text-xs font-bold text-white uppercase tracking-wider">
+                Bit-Perfect Lossless
               </div>
-              <div className="text-sm font-bold text-white mb-0.5">
-                Lossless & Spatial DSP
+              <div className="text-[11px] text-zinc-400 font-sans">
+                Equalizer, spatial DSP, and FLAC engine
               </div>
-              <p className="text-xs text-zinc-400 leading-relaxed">
-                Bit-perfect playback, dynamic equalizer, and parametric spatial audio filters.
-              </p>
             </div>
           </div>
 

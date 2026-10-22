@@ -13,6 +13,7 @@ declare global {
 export type EventAction =
   | 'hero_support_click'
   | 'hero_explore_click'
+  | 'hero_badge_click'
   | 'download_app_click'
   | 'support_method_click'
   | 'upi_modal_open'
@@ -23,7 +24,12 @@ export type EventAction =
   | 'reward_claimed'
   | 'return_to_app_click'
   | 'audio_guide_view'
-  | 'audio_guide_drawer_toggle';
+  | 'audio_guide_drawer_toggle'
+  | 'sticky_ad_expanded'
+  | 'sticky_ad_smartlink_click'
+  | 'sticky_ad_minimized'
+  | 'adsterra_click_triggered'
+  | 'direct_smartlink_opened';
 
 export interface EventParams {
   method?: string;

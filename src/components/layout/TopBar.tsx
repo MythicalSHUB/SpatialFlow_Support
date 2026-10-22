@@ -20,6 +20,7 @@ export function TopBar({ onOpenGuides }: TopBarProps) {
         {/* Zone 1: Nothing OS Dot-Matrix Brand Wordmark */}
         <Link 
           to="/" 
+          data-no-ad="true"
           className="flex items-center group cursor-pointer"
         >
           <span className="font-ndot text-lg sm:text-xl text-white tracking-widest group-hover:text-neutral-300 transition-colors uppercase">
@@ -30,24 +31,28 @@ export function TopBar({ onOpenGuides }: TopBarProps) {
         {/* Zone 2: Monospaced Navigation Links */}
         <nav className="hidden md:flex items-center gap-7 text-[11px] font-mono uppercase tracking-[0.15em] text-zinc-400">
           <button 
+            data-no-ad="true"
             onClick={() => scrollToSection('mission')}
             className="hover:text-white transition-colors cursor-pointer"
           >
             Mission
           </button>
           <button 
+            data-no-ad="true"
             onClick={() => scrollToSection('transparency')}
             className="hover:text-white transition-colors cursor-pointer"
           >
             Costs & Allocation
           </button>
           <button 
+            data-no-ad="true"
             onClick={() => scrollToSection('support-options')}
             className="hover:text-white transition-colors cursor-pointer"
           >
             Ways to Support
           </button>
           <a
+            data-no-ad="true"
             href="https://spatialflow.vercel.app/"
             target="_blank"
             rel="noopener noreferrer"
@@ -58,6 +63,7 @@ export function TopBar({ onOpenGuides }: TopBarProps) {
           </a>
           {onOpenGuides && (
             <button 
+              data-no-ad="true"
               onClick={() => {
                 trackEvent('audio_guide_drawer_toggle');
                 onOpenGuides();
@@ -72,6 +78,7 @@ export function TopBar({ onOpenGuides }: TopBarProps) {
         {/* Zone 3: Nothing OS Pill Action Button */}
         <div className="flex items-center gap-3">
           <button
+            data-no-ad="true"
             onClick={() => {
               trackEvent('hero_support_click', { source: 'topbar' });
               scrollToSection('support-options');

@@ -1,4 +1,4 @@
-import { useId } from 'react';
+import { useId, useState, useEffect, useRef } from 'react';
 
 export type AdsterraBannerType = 
   | '468x60' 
@@ -58,6 +58,27 @@ interface AdsterraBannerProps {
 export function AdsterraBanner({ type, className = '', showBadge = true }: AdsterraBannerProps) {
   const config = BANNER_CONFIGS[type];
   const uniqueId = useId();
+  const [inView, setInView] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    // Lazy load iframes 250px before entering viewport
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '250px' }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   if (!config) return null;
 
@@ -98,9 +119,12 @@ export function AdsterraBanner({ type, className = '', showBadge = true }: Adste
   `;
 
   return (
-    <div className={`flex flex-col items-center justify-center my-4 ${className}`}>
+    <div 
+      ref={containerRef}
+      className={`flex flex-col items-center justify-center my-3 ${className}`}
+    >
       {showBadge && (
-        <div className="flex items-center justify-between w-full max-w-full px-1 mb-1.5 text-[10px] font-mono text-zinc-500 uppercase tracking-wider" style={{ maxWidth: `${config.width}px` }}>
+        <div className="flex items-center justify-between w-full max-w-full px-1 mb-1 text-[10px] font-mono text-zinc-500 uppercase tracking-wider" style={{ maxWidth: `${config.width}px` }}>
           <span className="flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
             Sponsored
@@ -117,26 +141,33 @@ export function AdsterraBanner({ type, className = '', showBadge = true }: Adste
       )}
 
       <div 
-        className="relative overflow-hidden rounded-md bg-zinc-900/60 border border-white/10 shadow-lg flex items-center justify-center"
+        className="relative overflow-hidden rounded-md bg-black/40 border border-white/10 shadow-lg flex items-center justify-center"
         style={{
           width: `${config.width}px`,
           height: `${config.height}px`,
           maxWidth: '100%',
         }}
       >
-        <iframe
-          id={`adsterra-frame-${uniqueId}`}
-          title={`Adsterra Ad ${type}`}
-          srcDoc={srcDoc}
-          width={config.width}
-          height={config.height}
-          style={{
-            border: 'none',
-            maxWidth: '100%',
-            overflow: 'hidden',
-          }}
-          scrolling="no"
-        />
+        {inView ? (
+          <iframe
+            id={`adsterra-frame-${uniqueId}`}
+            title={`Adsterra Ad ${type}`}
+            srcDoc={srcDoc}
+            width={config.width}
+            height={config.height}
+            loading="lazy"
+            style={{
+              border: 'none',
+              maxWidth: '100%',
+              overflow: 'hidden',
+            }}
+            scrolling="no"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-[10px] font-mono text-zinc-600 uppercase">
+            Loading Sponsor...
+          </div>
+        )}
       </div>
     </div>
   );

@@ -117,6 +117,7 @@ export function Footer({ onOpenGuides }: FooterProps) {
               </li>
               <li>
                 <a 
+                  data-no-ad="true"
                   href={links.kofi} 
                   target="_blank" 
                   rel="noopener noreferrer" 
@@ -128,6 +129,18 @@ export function Footer({ onOpenGuides }: FooterProps) {
               </li>
               <li>
                 <a 
+                  data-no-ad="true"
+                  href={links.paypal} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="hover:text-white transition-colors flex items-center gap-1.5"
+                >
+                  <span>PayPal Direct</span>
+                </a>
+              </li>
+              <li>
+                <a 
+                  data-no-ad="true"
                   href={links.githubSponsors} 
                   target="_blank" 
                   rel="noopener noreferrer" 

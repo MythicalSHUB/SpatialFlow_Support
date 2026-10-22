@@ -12,6 +12,30 @@ const BAYER_8X8 = [
   63, 31, 55, 23, 61, 29, 53, 21
 ].map((e) => (e + 0.5) / 64);
 
+// Pre-computed Sine Lookup Table for ultra-fast trigonometry (0 CPU overhead)
+const LUT_SIZE = 1024;
+const SIN_LUT = new Float32Array(LUT_SIZE);
+const TWO_PI = Math.PI * 2;
+for (let i = 0; i < LUT_SIZE; i++) {
+  SIN_LUT[i] = Math.sin((i / LUT_SIZE) * TWO_PI);
+}
+
+function fastSin(val: number): number {
+  let idx = Math.floor(((val % TWO_PI) / TWO_PI) * LUT_SIZE);
+  if (idx < 0) idx += LUT_SIZE;
+  return SIN_LUT[idx % LUT_SIZE];
+}
+
+function fastCos(val: number): number {
+  return fastSin(val + Math.PI * 0.5);
+}
+
+// 32-bit Little-Endian RGBA pixel values
+// 0xAABBGGRR
+const COLOR_TRANSPARENT = 0x00000000;
+const COLOR_DIM = 0x24e0e0e0;     // ~14% opacity silver
+const COLOR_BRIGHT = 0xc0ffffff;  // ~75% opacity brilliant white
+
 interface RailwayDitherBackgroundProps {
   cell?: number;
   baseDensity?: number;
@@ -20,7 +44,7 @@ interface RailwayDitherBackgroundProps {
 }
 
 export function RailwayDitherBackground({
-  cell = 6,
+  cell = 7,
   baseDensity = 0.22,
   interactive = true,
   className = ''
@@ -30,77 +54,113 @@ export function RailwayDitherBackground({
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return;
 
-    // Respect user's accessibility motion settings
+    // Respect reduced motion settings
     const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
-    // Pointer state with heat-map exponential decay
-    const cursor = { x: -1, y: -1, heat: 0 };
-    let isVisible = true;
+    // Offscreen canvas buffer for single GPU-blit scaling
+    const offscreen = document.createElement('canvas');
+    const offCtx = offscreen.getContext('2d');
+    if (!offCtx) return;
+
     let animFrame = 0;
     let lastTime = 0;
+    let isVisible = true;
+    let isTabFocused = true;
+
+    // Grid dimensions
     let width = 0;
     let height = 0;
+    let cols = 0;
+    let rows = 0;
+    let imgData: ImageData | null = null;
+    let buf32: Uint32Array | null = null;
 
-    // Monochrome theme configuration (dim ambient & bright flare silver dots)
-    const tones = {
-      dim: 'rgba(255, 255, 255, 0.12)',
-      bright: 'rgba(255, 255, 255, 0.75)'
-    };
+    // Pointer state with smooth exponential decay
+    const cursor = { gridX: -100, gridY: -100, heat: 0 };
 
     const handleResize = () => {
       const rect = canvas.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      width = rect.width;
-      height = rect.height;
-      canvas.width = Math.round(width * dpr);
-      canvas.height = Math.round(height * dpr);
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      width = Math.round(rect.width);
+      height = Math.round(rect.height);
+
+      if (width <= 0 || height <= 0) return;
+
+      canvas.width = width;
+      canvas.height = height;
+
+      cols = Math.ceil(width / cell);
+      rows = Math.ceil(height / cell);
+
+      offscreen.width = cols;
+      offscreen.height = rows;
+
+      imgData = offCtx.createImageData(cols, rows);
+      buf32 = new Uint32Array(imgData.data.buffer);
+
+      // Disable smoothing for authentic crisp dither square pixels
+      ctx.imageSmoothingEnabled = false;
     };
 
     const render = (timeMs: number) => {
-      const seconds = timeMs / 1000;
-      ctx.clearRect(0, 0, width, height);
+      if (!imgData || !buf32 || cols <= 0 || rows <= 0) return;
 
-      const cols = Math.ceil(width / cell);
-      const rows = Math.ceil(height / cell);
-      const dotSize = Math.max(1.5, cell * 0.38);
+      const seconds = timeMs * 0.001;
 
-      // Smooth pointer heat dissipation
-      cursor.heat += ((cursor.x >= 0 ? 1 : 0) - cursor.heat) * 0.08;
+      // Exponential cursor heat relaxation
+      cursor.heat += ((cursor.gridX >= 0 ? 1 : 0) - cursor.heat) * 0.1;
 
+      const cursorGridX = cursor.gridX;
+      const cursorGridY = cursor.gridY;
+      const heat = cursor.heat;
+      const checkCursor = interactive && heat > 0.02;
+
+      let ptr = 0;
       for (let r = 0; r < rows; r++) {
-        const bayerRowOffset = (r % 8) * 8;
+        const bayerRowOffset = (r & 7) * 8;
+        const dy = r - cursorGridY;
+        const dy2 = dy * dy;
 
         for (let c = 0; c < cols; c++) {
-          // Full-screen ambient baseline plus dual harmonic traveling waves
+          // Ambient traveling waves using lookup table
           let val = baseDensity;
-          val += 0.14 * Math.sin(c * 0.08 + seconds * 0.7) * Math.sin(r * 0.09 - seconds * 0.5);
-          val += 0.08 * Math.cos((c * 0.06 - r * 0.05) + seconds * 0.45);
+          val += 0.13 * fastSin(c * 0.08 + seconds * 0.7) * fastSin(r * 0.09 - seconds * 0.5);
+          val += 0.07 * fastCos((c * 0.06 - r * 0.05) + seconds * 0.45);
 
-          // Interactive cursor proximity flare
-          if (interactive && cursor.heat > 0.01) {
-            const dx = c * cell - cursor.x;
-            const dy = r * cell - cursor.y;
-            val += 0.65 * cursor.heat * Math.exp(-(dx * dx + dy * dy) / 22000);
+          // Fast mouse proximity flare
+          if (checkCursor) {
+            const dx = c - cursorGridX;
+            const distSq = dx * dx + dy2;
+            if (distSq < 450) { // within radius
+              val += 0.65 * heat * Math.exp(-distSq * 0.005);
+            }
           }
 
-          // Bayer 8x8 threshold comparison
-          const threshold = BAYER_8X8[bayerRowOffset + (c % 8)];
+          // Bayer 8x8 threshold test
+          const threshold = BAYER_8X8[bayerRowOffset + (c & 7)];
           if (val > threshold) {
-            ctx.fillStyle = val - threshold > 0.26 ? tones.bright : tones.dim;
-            ctx.fillRect(c * cell, r * cell, dotSize, dotSize);
+            buf32[ptr++] = val - threshold > 0.25 ? COLOR_BRIGHT : COLOR_DIM;
+          } else {
+            buf32[ptr++] = COLOR_TRANSPARENT;
           }
         }
       }
+
+      // Write pixel buffer into offscreen canvas
+      offCtx.putImageData(imgData, 0, 0);
+
+      // 1 single GPU draw call stretches offscreen buffer across main canvas
+      ctx.clearRect(0, 0, width, height);
+      ctx.drawImage(offscreen, 0, 0, cols, rows, 0, 0, width, height);
     };
 
     const loop = (timestamp: number) => {
       animFrame = requestAnimationFrame(loop);
-      // Smooth frame-rate throttling (~30-36fps) for silky fluid motion and low power draw
-      if (!isVisible || timestamp - lastTime < 28) return;
+
+      // Throttle to 33ms (~30fps) for fluid visual motion with zero dropped frames or CPU spikes
+      if (!isVisible || !isTabFocused || timestamp - lastTime < 32) return;
       lastTime = timestamp;
       render(timestamp);
     };
@@ -124,16 +184,21 @@ export function RailwayDitherBackground({
     });
     intersectionObserver.observe(canvas);
 
-    // Track mouse globally for seamless window-wide interactivity
+    const handleVisibilityChange = () => {
+      isTabFocused = !document.hidden;
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    // Track pointer in grid coordinates for instant proximity calculation
     const onPointerMove = (e: PointerEvent) => {
       const rect = canvas.getBoundingClientRect();
-      cursor.x = e.clientX - rect.left;
-      cursor.y = e.clientY - rect.top;
+      cursor.gridX = Math.floor((e.clientX - rect.left) / cell);
+      cursor.gridY = Math.floor((e.clientY - rect.top) / cell);
     };
 
     const onPointerLeave = () => {
-      cursor.x = -1;
-      cursor.y = -1;
+      cursor.gridX = -100;
+      cursor.gridY = -100;
     };
 
     if (interactive && !prefersReducedMotion) {
@@ -145,6 +210,7 @@ export function RailwayDitherBackground({
       cancelAnimationFrame(animFrame);
       resizeObserver.disconnect();
       intersectionObserver.disconnect();
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
       if (interactive) {
         window.removeEventListener('pointermove', onPointerMove);
         document.removeEventListener('pointerleave', onPointerLeave);
@@ -155,11 +221,19 @@ export function RailwayDitherBackground({
   return (
     <div
       aria-hidden="true"
-      className={`pointer-events-none fixed inset-0 overflow-hidden ${className}`}
+      className={`pointer-events-none fixed inset-0 overflow-hidden will-change-transform ${className}`}
+      style={{
+        transform: 'translateZ(0)',
+        contain: 'strict',
+      }}
     >
       <canvas
         ref={canvasRef}
         className="w-full h-full block"
+        style={{
+          imageRendering: 'pixelated',
+          transform: 'translateZ(0)',
+        }}
       />
     </div>
   );

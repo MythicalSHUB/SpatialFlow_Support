@@ -53,6 +53,7 @@ export function UpiQrModal({ isOpen, onClose }: UpiQrModalProps) {
       aria-labelledby="upi-modal-title"
     >
       <div 
+        data-no-ad="true"
         className="relative w-full max-w-md bg-black/75 backdrop-blur-xl border border-white/20 rounded-3xl p-6 sm:p-8 shadow-2xl text-left"
         onClick={(e) => e.stopPropagation()}
       >
